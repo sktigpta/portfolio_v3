@@ -39,10 +39,6 @@ const ProjectShowcaseCarousel = () => {
       demo: "https://farm-floo-demo.vercel.app",
       screenshots: [
         "/api/placeholder/150/100",
-        "/api/placeholder/150/100",
-        "/api/placeholder/150/100",
-        "/api/placeholder/150/100",
-        "/api/placeholder/150/100"
       ]
     },
     {

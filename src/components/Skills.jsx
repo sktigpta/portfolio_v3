@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { 
-  Code, 
-  Database, 
-  Cloud, 
-  Laptop, 
-  Users, 
+import { useRef, useState, useEffect } from 'react';
+import {
+  Code,
+  Database,
+  Cloud,
+  Laptop,
+  Users,
   Briefcase,
   FileCode,
   FileJson,
@@ -23,11 +23,12 @@ import {
   UserPlus,
   MessageSquare,
   Shuffle,
-  Bitcoin
+  Bitcoin,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 const Skills = () => {
-  // Skills data with logo IDs
   const skills = {
     Languages: [
       { name: 'Python', logoId: 'fileCode' },
@@ -74,24 +75,19 @@ const Skills = () => {
   };
 
   const [activeFilter, setActiveFilter] = useState('All');
-
   const filters = ['All', ...Object.keys(skills)];
 
-  // Get all skills as a flat array with their categories
   const allSkillsWithCategories = Object.entries(skills).flatMap(([category, skillsList]) =>
     skillsList.map(skill => ({ ...skill, category }))
   );
 
-  // Filter skills based on active filter
   const filteredSkills = activeFilter === 'All'
     ? allSkillsWithCategories
     : allSkillsWithCategories.filter(item => item.category === activeFilter);
 
-  // Get icon based on logoId
   const getLogoIcon = (logoId) => {
     const iconProps = { size: 24, className: "text-white" };
-    
-    switch(logoId) {
+    switch (logoId) {
       case 'code': return <Code {...iconProps} />;
       case 'fileCode': return <FileCode {...iconProps} />;
       case 'fileJson': return <FileJson {...iconProps} />;
@@ -120,57 +116,77 @@ const Skills = () => {
     }
   };
 
-  // Get category icon
-  const getCategoryIcon = (category) => {
-    const iconProps = { color: "white", size: 24 };
-    
-    switch(category) {
-      case 'Languages':
-        return <Code {...iconProps} />;
-      case 'Frameworks/Libraries':
-        return <Laptop {...iconProps} />;
-      case 'Databases':
-        return <Database {...iconProps} />;
-      case 'Cloud/DevOps':
-        return <Cloud {...iconProps} />;
-      case 'Technologies':
-        return <FileCode {...iconProps} />;
-      case 'Soft Skills':
-        return <Users {...iconProps} />;
-      default:
-        return <Briefcase {...iconProps} />;
-    }
+  const scrollRef = useRef(null);
+  const [showLeft, setShowLeft] = useState(false);
+  const [showRight, setShowRight] = useState(true);
+
+  const checkScrollPosition = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setShowLeft(el.scrollLeft > 0);
+    setShowRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
   };
+
+  const scrollLeft = () => {
+    scrollRef.current.scrollBy({ left: -150, behavior: 'smooth' });
+  };
+
+  const scrollRight = () => {
+    scrollRef.current.scrollBy({ left: 150, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    checkScrollPosition();
+    const el = scrollRef.current;
+    if (el) el.addEventListener('scroll', checkScrollPosition);
+    return () => el?.removeEventListener('scroll', checkScrollPosition);
+  }, []);
 
   return (
     <section>
       <div className="title text-lg font-semibold text-neutral-200 mb-4">Skills</div>
 
-      {/* Filter Buttons */}
-      <div className="flex flex-wrap gap-2 mb-8">
-        {filters.map((filter) => (
-          <button
-            key={filter}
-            onClick={() => setActiveFilter(filter)}
-            className={`px-5 py-1 rounded-md text-sm transition-all ${
-              activeFilter === filter
-                ? 'bg-neutral-700 text-neutral-200 font-weight-400'
-                : 'bg-neutral-800 text-neutral-200 hover:bg-neutral-700'
-            }`}
-          >
-            {filter}
+      {/* Scrollable Filter Buttons with Arrows */}
+      <div className="relative w-full mb-8">
+        {showLeft && (
+          <button onClick={scrollLeft} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-neutral-800 hover:bg-neutral-700 p-1.4">
+            <ChevronLeft size={20} className="text-white" />
           </button>
-        ))}
+        )}
+        {showRight && (
+          <button onClick={scrollRight} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-neutral-800 hover:bg-neutral-700 p-1.4">
+            <ChevronRight size={20} className="text-white" />
+          </button>
+        )}
+        <div
+          ref={scrollRef}
+          className="overflow-x-auto scrollbar-hide"
+        >
+          <div className="inline-flex gap-2">
+            {filters.map((filter) => (
+              <button
+                key={filter}
+                onClick={() => setActiveFilter(filter)}
+                className={`px-5 py-1 rounded-md text-sm transition-all whitespace-nowrap ${activeFilter === filter
+                    ? 'bg-neutral-700 text-neutral-200 font-semibold'
+                    : 'bg-neutral-800 text-neutral-200 hover:bg-neutral-700'
+                  }`}
+              >
+                {filter}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Skills Grid */}
       <div className="w-full grid grid-cols-2 sm:grid-cols-5 md:grid-cols-7 gap-2">
-        {filteredSkills.map(({ name, logoId, category }) => (
+        {filteredSkills.map(({ name, logoId }) => (
           <div
             key={name}
             className="w-full bg-neutral-800 p-3 flex flex-col items-center text-center hover:bg-neutral-700 transition-colors rounded"
           >
-            <div className="mb-2">
+            <div className="mb-2 hidden lg:block">
               {getLogoIcon(logoId)}
             </div>
             <span className="text-neutral-200">{name}</span>
