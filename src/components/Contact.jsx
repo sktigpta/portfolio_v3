@@ -63,7 +63,7 @@ const ContactPage = () => {
 
       try {
         // Real API call to your backend
-        const response = await fetch('https://portfolio-v2-backend.vercel.app/api/contact', {
+        const response = await fetch('https://portfolio-v2-backend-xi.vercel.app/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
