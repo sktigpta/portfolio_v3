@@ -62,8 +62,8 @@ const ContactPage = () => {
       setSubmitStatus(null);
 
       try {
-        // Real API call to your backend
-        const response = await fetch('https://portfolio-v2-backend-xi.vercel.app/', {
+        // Fixed API endpoint to match the working implementation
+        const response = await fetch('https://portfolio-v2-backend-xi.vercel.app/api/contact', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -140,13 +140,13 @@ const ContactPage = () => {
             <div className="mt-8">
               <h3 className="text-neutral-300 font-medium mb-4">Connect with me</h3>
               <div className="flex space-x-4">
-                <a href="https://linkedin.com/in/example" className="p-2 bg-neutral-700 hover:bg-neutral-600 transition-colors rounded-full" title="LinkedIn">
+                <a href="https://linkedin.com/in/sktigpta" className="p-2 bg-neutral-700 hover:bg-neutral-600 transition-colors rounded-full" title="LinkedIn">
                   <FaLinkedinIn size={20} className="text-neutral-300" />
                 </a>
-                <a href="https://github.com/example" className="p-2 bg-neutral-700 hover:bg-neutral-600 transition-colors rounded-full" title="GitHub">
+                <a href="https://github.com/sktigpta" className="p-2 bg-neutral-700 hover:bg-neutral-600 transition-colors rounded-full" title="GitHub">
                   <FaGithub size={20} className="text-neutral-300" />
                 </a>
-                <a href="https://leetcode.com/example" className="p-2 bg-neutral-700 hover:bg-neutral-600 transition-colors rounded-full" title="LeetCode">
+                <a href="https://leetcode.com/sktigpta" className="p-2 bg-neutral-700 hover:bg-neutral-600 transition-colors rounded-full" title="LeetCode">
                   <Code size={20} className="text-neutral-300" />
                 </a>
               </div>
