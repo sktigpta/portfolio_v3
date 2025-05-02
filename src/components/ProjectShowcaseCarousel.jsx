@@ -14,8 +14,8 @@ const ProjectShowcaseCarousel = () => {
     {
       title: "SecureRights",
       description: "A secure and scalable full-stack platform for digital rights management using React, Node.js, and MongoDB. Includes user authentication, role-based access, and a responsive dashboard.",
-      repository: "https://github.com/yourusername/securerights",
-      demo: "https://securerights-demo.vercel.app",
+      repository: "https://github.com/sktigpta/Gdg-Solution-Challenge.git",
+      demo: "https://securerights.app/",
       screenshots: [
         "/projects/securerightshome.png",
         "/projects/securerightsdashboard.png",
@@ -24,8 +24,8 @@ const ProjectShowcaseCarousel = () => {
     {
       title: "ProofX",
       description: "A productivity and task management tool with a drag-and-drop interface. Built with modern React practices, including authentication and responsive design.",
-      repository: "https://github.com/yourusername/proofx",
-      demo: "https://proofx-demo.vercel.app",
+      repository: "https://github.com/sktigpta/proofX",
+      demo: "https://proof-x-client.vercel.app/",
       screenshots: [
         "/projects/proofxdashboard.png",
         "/projects/proofxlogin.png",
@@ -35,20 +35,16 @@ const ProjectShowcaseCarousel = () => {
     {
       title: "Farm-floo",
       description: "A modern, responsive farmer-to-customer app with support for product uploads, user profiles, and order requests. Built with a clean UI and dark mode toggle.",
-      repository: "https://github.com/yourusername/farm-floo",
-      demo: "https://farm-floo-demo.vercel.app",
+      repository: "https://github.com/sktigpta/Farm-flo",
       screenshots: [
-        "/api/placeholder/150/100",
       ]
     },
     {
       title: "Rent-blee",
       description: "A digital rental platform that allows users to find and book rental properties easily. Includes features like authentication, dynamic listings, and user-friendly filtering.",
-      repository: "https://github.com/yourusername/rent-blee",
+      repository: "https://github.com/sktigpta?tab=repositories",
       demo: "https://rent-blee-demo.vercel.app",
       screenshots: [
-        "/api/placeholder/150/100",
-        "/api/placeholder/150/100"
       ]
     },
     {
