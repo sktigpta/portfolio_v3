@@ -17,8 +17,8 @@ const ProjectShowcaseCarousel = () => {
       repository: "https://github.com/yourusername/securerights",
       demo: "https://securerights-demo.vercel.app",
       screenshots: [
-        "src/assets/projects/securerightshome.png",
-        "src/assets/projects/securerightsdashboard.png",
+        "/projects/securerightshome.png",
+        "/projects/securerightsdashboard.png",
       ]
     },
     {
@@ -27,9 +27,9 @@ const ProjectShowcaseCarousel = () => {
       repository: "https://github.com/yourusername/proofx",
       demo: "https://proofx-demo.vercel.app",
       screenshots: [
-        "src/assets/projects/proofxdashboard.png",
-        "src/assets/projects/proofxlogin.png",
-        "src/assets/projects/proofxsignup.png",
+        "/projects/proofxdashboard.png",
+        "/projects/proofxlogin.png",
+        "/projects/proofxsignup.png",
       ]
     },
     {
@@ -57,7 +57,7 @@ const ProjectShowcaseCarousel = () => {
       repository: "https://github.com/yourusername/order-execution-system",
       demo: null,
       screenshots: [
-        "src/assets/projects/ordexecoding.png",
+        "/projects/ordexecoding.png",
       ]
     }
   ];
