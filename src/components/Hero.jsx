@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { FaGithub, FaLinkedinIn, FaTwitter, FaDribbble } from "react-icons/fa"
 import { FaReact, FaNodeJs, FaFigma, FaAws } from "react-icons/fa"
-import { SiTensorflow} from "react-icons/si"
+import { SiTensorflow } from "react-icons/si"
 
 function Hero({ navigateToSection }) {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -81,7 +81,7 @@ function Hero({ navigateToSection }) {
             View My Work
           </button>
           <a
-            href="https://www.linkedin.com/in/shaktidhar-gupta/"
+            href="https://www.linkedin.com/in/sktigpta/"
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-3 bg-transparent border border-white font-medium rounded-md hover:bg-white hover:text-black transition-colors duration-300"
@@ -232,35 +232,46 @@ function Hero({ navigateToSection }) {
 
       {/* Social media icons */}
       <div className="hidden lg:block">
-        <div className={`absolute bottom-10 right-10 flex gap-4 z-10 transform ${isLoaded ? "translate-x-0 opacity-100" : "translate-x-5 opacity-0"} transition-all duration-1000 ease-out delay-700 md:flex`}>
-          <a href="#" className="w-10 h-10 rounded-full bg-gray-900 bg-opacity-30 border border-gray-700 flex items-center justify-center text-lg hover:transform hover:scale-110 hover:translate-y-1 transition-all duration-300">
+        <div
+          className={`absolute bottom-10 right-10 flex gap-4 z-10 transform ${isLoaded ? "translate-x-0 opacity-100" : "translate-x-5 opacity-0"
+            } transition-all duration-1000 ease-out delay-700 md:flex`}
+        >
+          <a
+            href="https://github.com/sktigpta/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-10 h-10 rounded-full bg-gray-900 bg-opacity-30 border border-gray-700 flex items-center justify-center text-lg hover:transform hover:scale-110 hover:translate-y-1 transition-all duration-300"
+          >
             <FaGithub />
           </a>
           <a
-            href="https://www.linkedin.com/in/shaktidhar-gupta/"
+            href="https://www.linkedin.com/in/sktigpta/"
             target="_blank"
             rel="noopener noreferrer"
             className="w-10 h-10 rounded-full bg-gray-900 bg-opacity-30 border border-gray-700 flex items-center justify-center text-lg hover:transform hover:scale-110 hover:translate-y-1 transition-all duration-300"
           >
             <FaLinkedinIn />
           </a>
-          <a href="#" className="w-10 h-10 rounded-full bg-gray-900 bg-opacity-30 border border-gray-700 flex items-center justify-center text-lg hover:transform hover:scale-110 hover:translate-y-1 transition-all duration-300">
-            <FaTwitter />
-          </a>
-          <a href="#" className="w-10 h-10 rounded-full bg-gray-900 bg-opacity-30 border border-gray-700 flex items-center justify-center text-lg hover:transform hover:scale-110 hover:translate-y-1 transition-all duration-300">
-            <FaDribbble />
-          </a>
-        </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div
-        onClick={() => navigateToSection?.(1)}
-        className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-10 cursor-pointer ${isLoaded ? "translate-y-0 opacity-70" : "translate-y-8 opacity-0"} transition-all duration-1000 ease-out delay-1000 hover:opacity-100`}
-      >
-        <div className="text-xs tracking-widest uppercase mb-2">Scroll Down</div>
+          <a
+            href="https://twitter.com/sktigpta"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-10 h-10 rounded-full bg-gray-900 bg-opacity-30 border border-gray-700 flex items-center justify-center text-lg hover:transform hover:scale-110 hover:translate-y-1 transition-all duration-300"
+    >
+          <FaTwitter />
+        </a>
       </div>
     </div>
+
+
+      {/* Scroll indicator */ }
+  <div
+    onClick={() => navigateToSection?.(1)}
+    className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-10 cursor-pointer ${isLoaded ? "translate-y-0 opacity-70" : "translate-y-8 opacity-0"} transition-all duration-1000 ease-out delay-1000 hover:opacity-100`}
+  >
+    <div className="text-xs tracking-widest uppercase mb-2">Scroll Down</div>
+  </div>
+    </div >
   )
 }
 
