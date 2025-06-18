@@ -1,6 +1,7 @@
 // App.jsx
 import './App.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Hero from './components/Hero';
 import Skills from './components/Skills';
 import Contact from './components/Contact';
@@ -11,53 +12,97 @@ import Footer from './components/Footer';
 const App = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [scrolled, setScrolled] = useState(false);
+  const isNavigatingRef = useRef(false);
 
-  // Intersection Observer to detect which section is in view
+  // Handle scroll effect for navbar
   useEffect(() => {
-    const sections = document.querySelectorAll('section');
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { threshold: 0.6 }
-    );
-
-    sections.forEach((section) => {
-      observer.observe(section);
-    });
-
-    // Handle scroll effect for navbar
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
+      setScrolled(window.scrollY > 50);
+      
+      // Only update active section if not currently navigating
+      if (!isNavigatingRef.current) {
+        updateActiveSection();
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-    return () => {
-      sections.forEach((section) => {
-        observer.unobserve(section);
+  // Update active section based on scroll position
+  const updateActiveSection = () => {
+    const sections = ['home', 'skills', 'projects', 'contact'];
+    const scrollPosition = window.scrollY + 100; // Offset for navbar
+
+    for (const sectionId of sections) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const { offsetTop, offsetHeight } = element;
+        if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+          setActiveSection(sectionId);
+          break;
+        }
+      }
+    }
+  };
+
+  // Handle navigation to sections
+  const navigateToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      isNavigatingRef.current = true;
+      setActiveSection(sectionId);
+      
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
       });
-      window.removeEventListener('scroll', handleScroll);
-    };
+
+      // Reset navigation flag after scroll completes
+      setTimeout(() => {
+        isNavigatingRef.current = false;
+      }, 1000);
+    }
+  };
+
+  // Initialize active section on mount
+  useEffect(() => {
+    updateActiveSection();
   }, []);
 
   return (
-    <div className="app">
-      <Navbar activeSection={activeSection} scrolled={scrolled} />
+    <Router>
+      <div className="app">
+        <Navbar 
+          activeSection={activeSection} 
+          scrolled={scrolled} 
+          navigateToSection={navigateToSection}
+        />
 
-      <main>
-        <Hero />
-        <Skills />
-        <Projects />
-        <Contact />
-      </main>
-      <Footer/>
-    </div>
+        <main>
+          <Routes>
+            <Route path="*" element={
+              <>
+                <section id="home">
+                  <Hero />
+                </section>
+                <section id="skills">
+                  <Skills />
+                </section>
+                <section id="projects">
+                  <Projects />
+                </section>
+                <section id="contact">
+                  <Contact />
+                </section>
+              </>
+            } />
+          </Routes>
+        </main>
+        
+        <Footer />
+      </div>
+    </Router>
   );
 };
 

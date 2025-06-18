@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Navbar.css';
 
-const Navbar = ({ activeSection, scrolled }) => {
+const Navbar = ({ activeSection, scrolled, navigateToSection }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   const toggleMenu = () => {
@@ -22,6 +22,20 @@ const Navbar = ({ activeSection, scrolled }) => {
     
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
+  }, [isMenuOpen]);
+
+  // Close menu on escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }
   }, [isMenuOpen]);
 
   const menuVariants = {
@@ -61,8 +75,24 @@ const Navbar = ({ activeSection, scrolled }) => {
     })
   };
   
-  // Main navigation items (excluding contact which will be separate)
-  const navItems = ['home', 'projects', 'about'];
+  // Navigation items
+  const navItems = [
+    { name: 'home', label: 'Home' },
+    { name: 'skills', label: 'Skills' },
+    { name: 'projects', label: 'Projects' }
+  ];
+
+  // Handle navigation
+  const handleNavigation = (sectionId) => {
+    navigateToSection(sectionId);
+    setIsMenuOpen(false);
+  };
+
+  // Handle logo click
+  const handleLogoClick = () => {
+    navigateToSection('home');
+    setIsMenuOpen(false);
+  };
   
   return (
     <motion.nav
@@ -77,9 +107,11 @@ const Navbar = ({ activeSection, scrolled }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
+          onClick={handleLogoClick}
+          style={{ cursor: 'pointer' }}
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM10 18C5.58 18 2 14.42 2 10C2 5.58 5.58 2 10 2C14.42 2 18 5.58 18 10C18 14.42 14.42 18 10 18Z" fill="white"/>
+            <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM10 18C5.58 18 2 14.42 2 10C2 5.58 5.58 2 10 2C14.42 2 18 5.58 18 10C18 14.42 14.42 18 10 18Z" fill="currentColor"/>
           </svg>
           <span className="logo-text">Shaktidhar</span>
         </motion.div>
@@ -87,26 +119,27 @@ const Navbar = ({ activeSection, scrolled }) => {
         {/* Desktop menu */}
         <div className="nav-items-container">
           <ul className="navbar-links">
-            {navItems.map((section, i) => (
+            {navItems.map((item, i) => (
               <motion.li 
-                key={section}
+                key={item.name}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.1 * (i + 1) }}
               >
-                <a 
-                  href={`#${section}`} 
-                  className={activeSection === section ? 'active' : ''}
+                <button
+                  onClick={() => handleNavigation(item.name)}
+                  className={activeSection === item.name ? 'active' : ''}
+                  aria-label={`Navigate to ${item.label}`}
                 >
-                  {section.charAt(0).toUpperCase() + section.slice(1)}
-                  {activeSection === section && (
+                  {item.label}
+                  {activeSection === item.name && (
                     <motion.div 
                       className="active-indicator" 
                       layoutId="desktopActiveIndicator"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
-                </a>
+                </button>
               </motion.li>
             ))}
           </ul>
@@ -118,9 +151,13 @@ const Navbar = ({ activeSection, scrolled }) => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <a href="#contact" className="contact-button">
+            <button 
+              onClick={() => handleNavigation('contact')}
+              className={`contact-button ${activeSection === 'contact' ? 'active' : ''}`}
+              aria-label="Navigate to Contact"
+            >
               Contact
-            </a>
+            </button>
           </motion.div>
         </div>
 
@@ -133,9 +170,13 @@ const Navbar = ({ activeSection, scrolled }) => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <a href="#contact" className="contact-button">
+            <button 
+              onClick={() => handleNavigation('contact')}
+              className={`contact-button ${activeSection === 'contact' ? 'active' : ''}`}
+              aria-label="Navigate to Contact"
+            >
               Contact
-            </a>
+            </button>
           </motion.div>
           
           {/* Hamburger button */}
@@ -143,6 +184,7 @@ const Navbar = ({ activeSection, scrolled }) => {
             className="hamburger-button" 
             onClick={toggleMenu}
             aria-label="Toggle menu"
+            aria-expanded={isMenuOpen}
           >
             <span className="hamburger-icon">
               {isMenuOpen ? (
@@ -172,36 +214,36 @@ const Navbar = ({ activeSection, scrolled }) => {
               variants={menuVariants}
             >
               <ul className="mobile-nav-links">
-                {navItems.map((section, i) => (
+                {navItems.map((item, i) => (
                   <motion.li 
-                    key={section}
+                    key={item.name}
                     custom={i}
                     variants={menuItemVariants}
                   >
-                    <a 
-                      href={`#${section}`} 
-                      className={activeSection === section ? 'active' : ''}
-                      onClick={() => setIsMenuOpen(false)}
+                    <button
+                      className={activeSection === item.name ? 'active' : ''}
+                      onClick={() => handleNavigation(item.name)}
+                      aria-label={`Navigate to ${item.label}`}
                     >
-                      {section.charAt(0).toUpperCase() + section.slice(1)}
-                      {activeSection === section && (
+                      {item.label}
+                      {activeSection === item.name && (
                         <motion.div 
                           className="active-indicator-mobile" 
                           layoutId="mobileActiveIndicator"
                           transition={{ type: "spring", stiffness: 380, damping: 30 }}
                         />
                       )}
-                    </a>
+                    </button>
                   </motion.li>
                 ))}
                 <motion.li
                   custom={navItems.length}
                   variants={menuItemVariants}
                 >
-                  <a 
-                    href="#contact" 
+                  <button
                     className={activeSection === 'contact' ? 'active' : ''}
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={() => handleNavigation('contact')}
+                    aria-label="Navigate to Contact"
                   >
                     Contact
                     {activeSection === 'contact' && (
@@ -211,7 +253,7 @@ const Navbar = ({ activeSection, scrolled }) => {
                         transition={{ type: "spring", stiffness: 380, damping: 30 }}
                       />
                     )}
-                  </a>
+                  </button>
                 </motion.li>
               </ul>
             </motion.div>
