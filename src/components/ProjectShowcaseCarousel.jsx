@@ -263,15 +263,17 @@ const ProjectShowcaseCarousel = () => {
         </div>
 
         {/* Slide Navigation Arrows */}
-        <button
-          onClick={prevSlide}
-          className="hidden lg:block absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 w-10 h-10 rounded-full flex items-center justify-center text-white z-20 hover:bg-black/70 transition-all focus:outline-none"
-          aria-label="Previous slide"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
+        <div className="relative h-full w-full">
+          <button
+            onClick={prevSlide}
+            className="hidden lg:flex absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 w-10 h-10 rounded-full items-center justify-center text-white z-20 hover:bg-black/70 transition-all focus:outline-none"
+            aria-label="Previous slide"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        </div>
 
         <button
           onClick={nextSlide}
