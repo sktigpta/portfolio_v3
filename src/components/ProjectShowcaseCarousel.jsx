@@ -45,6 +45,9 @@ const ProjectShowcaseCarousel = () => {
       repository: "https://github.com/sktigpta?tab=repositories",
       demo: "https://rent-blee-demo.vercel.app",
       screenshots: [
+        "/projects/rentblee/rentbleeHome.png",
+        "/projects/rentblee/rentbleeLogin.png",
+        "/projects/rentblee/rentbleeRegister.png",
       ]
     },
     {
