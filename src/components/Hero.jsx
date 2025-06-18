@@ -29,7 +29,23 @@ function Hero({ navigateToSection }) {
     }))
   }
 
-  const [particles, setParticles] = useState(() => generateParticles(50)) // Increased particle count for more visual interest
+  // Generate background particles for blur effect
+  const generateBackgroundParticles = (count) => {
+    return Array.from({ length: count }, (_, i) => ({
+      id: i,
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      size: 8 + Math.random() * 20, // Larger particles for background
+      delay: Math.random() * 10,
+      duration: 20 + Math.random() * 40,
+      opacity: 0.1 + Math.random() * 0.3,
+      moveX: (Math.random() - 0.5) * 200,
+      moveY: (Math.random() - 0.5) * 200
+    }))
+  }
+
+  const [particles, setParticles] = useState(() => generateParticles(60)) // Increased particle count
+  const [backgroundParticles, setBackgroundParticles] = useState(() => generateBackgroundParticles(25))
 
   useEffect(() => {
     // Trigger animations after component mounts
@@ -45,25 +61,51 @@ function Hero({ navigateToSection }) {
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
   }, [])
-
-  // Function to handle navigation to projects section
-  const handleViewWork = () => {
-    navigateToSection?.(3) // Index 3 for projects
-  }
-
   return (
     <div className={`relative h-screen w-full flex items-center justify-center overflow-hidden bg-black text-white ${isLoaded ? "opacity-100" : "opacity-0"} transition-opacity duration-1000`}>
+
+      {/* Blurred Background Layer */}
+      <div className="absolute inset-0 backdrop-blur-3xl bg-black/30"></div>
+
+      {/* Background Particles with Blur Effect */}
+      <div className="absolute w-full h-full pointer-events-none">
+        {backgroundParticles.map((particle) => (
+          <div
+            key={`bg-${particle.id}`}
+            className={`absolute transform ${isLoaded ? "scale-100" : "scale-0"} transition-all duration-700`}
+            style={{
+              top: `${particle.top}%`,
+              left: `${particle.left}%`,
+              width: `${particle.size}px`,
+              height: `${particle.size}px`,
+              transitionDelay: `${particle.delay * 0.05}s`,
+              animation: `bgFloat ${particle.duration}s infinite ease-in-out`,
+              animationDelay: `${particle.delay}s`,
+              filter: 'blur(8px)',
+              opacity: particle.opacity,
+            }}
+          >
+            <div
+              className="w-full h-full rounded-full bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20"
+              style={{
+                boxShadow: `0 0 ${particle.size * 2}px rgba(147, 197, 253, 0.3)`
+              }}
+            ></div>
+          </div>
+        ))}
+      </div>
+
       {/* Main content */}
-      <div className={`relative z-10 text-center max-w-3xl px-5 transform ${isLoaded ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"} transition-all duration-1000 ease-out`}>
+      <div className={`relative z-20 text-center max-w-3xl px-5 transform ${isLoaded ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"} transition-all duration-1000 ease-out`}>
         <div className="mb-5 flex justify-center overflow-hidden">
-          <h1 className={`text-5xl md:text-6xl font-extrabold tracking-tighter transform ${isLoaded ? "translate-y-0" : "translate-y-full"} transition-transform duration-1000 ease-out bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent`}>
+          <h1 className={`text-5xl md:text-6xl font-extrabold tracking-tighter transform ${isLoaded ? "translate-y-0" : "translate-y-full"} transition-transform duration-1000 ease-out bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent drop-shadow-2xl`}>
             Shaktidhar Gupta
           </h1>
         </div>
 
         <div className="h-8 overflow-hidden mb-6">
           <div className="animate-cycleText">
-            <p className="h-8 flex items-center justify-center text-lg uppercase tracking-widest text-gray-300">Full-Stack Developer</p>
+            <p className="h-8 flex items-center justify-center text-lg uppercase tracking-widest text-gray-300">Software Developer</p>
             <p className="h-8 flex items-center justify-center text-lg uppercase tracking-widest text-gray-300">UX Designer</p>
             <p className="h-8 flex items-center justify-center text-lg uppercase tracking-widest text-gray-300">Creative Coder</p>
           </div>
@@ -74,12 +116,7 @@ function Hero({ navigateToSection }) {
         </p>
 
         <div className={`flex flex-wrap justify-center gap-5 transform ${isLoaded ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"} transition-all duration-1000 ease-out delay-500`}>
-          <button
-            onClick={handleViewWork}
-            className="px-6 py-3 bg-white text-black font-medium rounded-md hover:bg-gray-200 transition-colors duration-300"
-          >
-            View My Work
-          </button>
+
           <a
             href="https://www.linkedin.com/in/sktigpta/"
             target="_blank"
@@ -91,98 +128,103 @@ function Hero({ navigateToSection }) {
         </div>
       </div>
 
-      {/* Floating shapes */}
-      <div className="absolute w-full h-full">
-        {[...Array(15)].map((_, i) => (
+      {/* Enhanced Floating shapes with blur effect */}
+      <div className="absolute w-full h-full z-10">
+        {[...Array(20)].map((_, i) => (
           <div
             key={i}
-            className={`absolute w-10 h-10 ${isLoaded ? "opacity-20" : "opacity-0"} transition-opacity duration-1000`}
+            className={`absolute w-12 h-12 ${isLoaded ? "opacity-30" : "opacity-0"} transition-opacity duration-1000`}
             style={{
-              top: `${15 + (i * 5) % 70}%`,
-              left: `${10 + (i * 6) % 80}%`,
-              animationDelay: `${i * 0.5}s`
+              top: `${15 + (i * 4) % 70}%`,
+              left: `${10 + (i * 5) % 80}%`,
+              animationDelay: `${i * 0.4}s`,
+              filter: 'blur(1px)'
             }}
           >
             <div
-              className="w-full h-full border border-gray-700 bg-gray-900 bg-opacity-10 rounded-full"
+              className="w-full h-full border border-blue-300/40 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full backdrop-blur-sm"
               style={{
-                animation: `floatShape ${20 + i % 10}s infinite linear`,
-                animationDelay: `${i * 0.3}s`
+                animation: `floatShape ${18 + i % 12}s infinite linear`,
+                animationDelay: `${i * 0.2}s`,
+                boxShadow: '0 0 20px rgba(147, 197, 253, 0.2)'
               }}
             ></div>
           </div>
         ))}
       </div>
 
-      {/* Skill badges - hidden on tablets and phones */}
+      {/* Enhanced Skill badges with improved blur effects */}
       {windowWidth > 768 && (
-        <div className=" absolute w-full h-full">
+        <div className="absolute w-full h-full z-15">
           {[
             {
               Icon: FaReact,
               text: "React",
               top: "25%",
-              left: "15%",
-              delay: "0.2s"
+              left: "25%",
+              delay: "0.2s",
+              color: "from-cyan-400/20 to-blue-500/20"
             },
             {
               Icon: FaNodeJs,
               text: "Node.js",
               top: "40%",
-              right: "20%",
-              delay: "1.3s"
+              right: "10%",
+              delay: "1.3s",
+              color: "from-green-400/20 to-green-600/20"
             },
             {
               Icon: SiTensorflow,
               text: "TensorFlow",
-              bottom: "30%",
-              left: "23%",
-              delay: "0.6s"
+              bottom: "38%",
+              left: "14%",
+              delay: "0.6s",
+              color: "from-orange-400/20 to-red-500/20"
             },
             {
               Icon: FaFigma,
               text: "Figma",
               top: "70%",
-              right: "32%",
-              delay: "1.8s"
+              right: "20%",
+              delay: "1.8s",
+              color: "from-purple-400/20 to-pink-500/20"
             },
             {
               Icon: FaAws,
               text: "AWS",
-              top: "75%",
-              right: "60%",
-              delay: "1s"
+              top: "80%",
+              right: "63%",
+              delay: "1s",
+              color: "from-yellow-400/20 to-orange-500/20"
             }
           ].map((skill, i) => (
             <div
               key={i}
-              className={`absolute px-4 py-2 rounded-full border border-gray-700 bg-gray-900 bg-opacity-30 flex items-center gap-2 cursor-pointer transform ${isLoaded ? "scale-100 opacity-100 " : "scale-75 opacity-0"} transition-all duration-500 hover:scale-110 hover:shadow-lg`}
+              className={`absolute px-5 py-3 rounded-xl border border-white/20 bg-gradient-to-r ${skill.color} flex items-center gap-3 cursor-pointer transform ${isLoaded ? "scale-100 opacity-100" : "scale-75 opacity-0"} transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:border-white/40`}
               style={{
                 top: skill.top,
                 left: skill.left,
                 right: skill.right,
                 bottom: skill.bottom,
                 transitionDelay: skill.delay,
-                backdropFilter: "blur(8px)",
+                backdropFilter: "blur(12px)",
                 animation: `floatBadge ${12 + i * 2}s infinite ease-in-out`,
-                animationDelay: skill.delay
+                animationDelay: skill.delay,
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
               }}
             >
-              <skill.Icon className="text-white" />
-              <span className="text-sm font-medium">{skill.text}</span>
+              <skill.Icon className="text-white text-lg" />
+              <span className="text-sm font-semibold text-white">{skill.text}</span>
             </div>
           ))}
         </div>
       )}
 
-      {/* Animated Particles with Random Movement and Opacity */}
-      <div className="absolute w-full h-full pointer-events-none">
+      {/* Enhanced Animated Particles */}
+      <div className="absolute w-full h-full pointer-events-none z-10">
         {particles.map((particle) => {
-          // Create unique animation name for each particle
           const particleAnimationName = `particle-${particle.id}`;
           const particleBlinkName = `particle-blink-${particle.id}`;
-
-          // Define custom keyframes for this particle
           const moveX = particle.movementAxis === 'horizontal' ? particle.movementRange * particle.movementDirection : 0;
           const moveY = particle.movementAxis === 'vertical' ? particle.movementRange * particle.movementDirection : 0;
 
@@ -217,12 +259,18 @@ function Hero({ navigateToSection }) {
                   0%, 100% { opacity: ${particle.opacity}; }
                   50% { opacity: ${particle.opacity * 0.2}; }
                 }
+                @keyframes bgFloat {
+                  0%, 100% { transform: translate(0, 0) scale(1); }
+                  25% { transform: translate(20px, -30px) scale(1.1); }
+                  50% { transform: translate(-25px, 20px) scale(0.9); }
+                  75% { transform: translate(15px, 35px) scale(1.05); }
+                }
                 `}
               </style>
               <div
-                className="w-full h-full rounded-full bg-white"
+                className="w-full h-full rounded-full bg-gradient-to-r from-white via-blue-200 to-purple-200"
                 style={{
-                  boxShadow: `0 0 ${particle.size + 3}px rgba(255, 255, 255, ${particle.opacity * 0.7})`
+                  boxShadow: `0 0 ${particle.size + 5}px rgba(255, 255, 255, ${particle.opacity * 0.8})`
                 }}
               ></div>
             </div>
@@ -230,17 +278,17 @@ function Hero({ navigateToSection }) {
         })}
       </div>
 
-      {/* Social media icons */}
-      <div className="hidden lg:block">
+      {/* Enhanced Social media icons */}
+      <div className="hidden lg:block z-20">
         <div
-          className={`absolute bottom-10 right-10 flex gap-4 z-10 transform ${isLoaded ? "translate-x-0 opacity-100" : "translate-x-5 opacity-0"
-            } transition-all duration-1000 ease-out delay-700 md:flex`}
+          className={`absolute bottom-10 right-10 flex gap-4 z-20 transform ${isLoaded ? "translate-x-0 opacity-100" : "translate-x-5 opacity-0"
+            } transition-all duration-1000 ease-out delay-700`}
         >
           <a
             href="https://github.com/sktigpta/"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-10 h-10 rounded-full bg-gray-900 bg-opacity-30 border border-gray-700 flex items-center justify-center text-lg hover:transform hover:scale-110 hover:translate-y-1 transition-all duration-300"
+            className="w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-lg hover:transform hover:scale-110 hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm hover:bg-white/20 hover:shadow-2xl"
           >
             <FaGithub />
           </a>
@@ -248,30 +296,32 @@ function Hero({ navigateToSection }) {
             href="https://www.linkedin.com/in/sktigpta/"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-10 h-10 rounded-full bg-gray-900 bg-opacity-30 border border-gray-700 flex items-center justify-center text-lg hover:transform hover:scale-110 hover:translate-y-1 transition-all duration-300"
+            className="w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-lg hover:transform hover:scale-110 hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm hover:bg-white/20 hover:shadow-2xl"
           >
             <FaLinkedinIn />
           </a>
           <a
             href="https://twitter.com/sktigpta"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-10 h-10 rounded-full bg-gray-900 bg-opacity-30 border border-gray-700 flex items-center justify-center text-lg hover:transform hover:scale-110 hover:translate-y-1 transition-all duration-300"
-    >
-          <FaTwitter />
-        </a>
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-lg hover:transform hover:scale-110 hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm hover:bg-white/20 hover:shadow-2xl"
+          >
+            <FaTwitter />
+          </a>
+        </div>
+      </div>
+
+      {/* Enhanced Scroll indicator */}
+      <div
+        onClick={() => navigateToSection?.(1)}
+        className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-20 cursor-pointer ${isLoaded ? "translate-y-0 opacity-70" : "translate-y-8 opacity-0"} transition-all duration-1000 ease-out delay-1000 hover:opacity-100`}
+      >
+        <div className="relative group inline-block overflow-hidden rounded-full border border-white/20 bg-white/5 px-4 py-2 backdrop-blur-sm text-xs text-gray-400 tracking-widest uppercase font-semibold mb-3">
+          <span className="relative z-10">Scroll Down</span>
+          <div className="absolute inset-0 bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-all duration-500 ease-in-out"></div>
+        </div>
       </div>
     </div>
-
-
-      {/* Scroll indicator */ }
-  <div
-    onClick={() => navigateToSection?.(1)}
-    className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-10 cursor-pointer ${isLoaded ? "translate-y-0 opacity-70" : "translate-y-8 opacity-0"} transition-all duration-1000 ease-out delay-1000 hover:opacity-100`}
-  >
-    <div className="text-xs tracking-widest uppercase mb-2">Scroll Down</div>
-  </div>
-    </div >
   )
 }
 
