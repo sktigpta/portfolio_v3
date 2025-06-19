@@ -31,50 +31,51 @@ import {
 const Skills = () => {
   const skills = {
     Languages: [
-      { name: 'Python', logoId: 'fileCode' },
-      { name: 'JavaScript', logoId: 'fileJson' },
-      { name: 'C++', logoId: 'code' },
-      { name: 'HTML/CSS', logoId: 'monitorSmartphone' },
-      { name: 'SQL', logoId: 'database' }
+      { name: 'Python', logoId: 'fileCode', color: 'from-cyan-400/20 to-blue-500/20' },
+      { name: 'JavaScript', logoId: 'fileJson', color: 'from-yellow-400/20 to-orange-500/20' },
+      { name: 'C++', logoId: 'code', color: 'from-blue-400/20 to-indigo-500/20' },
+      { name: 'HTML/CSS', logoId: 'monitorSmartphone', color: 'from-orange-400/20 to-red-500/20' },
+      { name: 'SQL', logoId: 'database', color: 'from-green-400/20 to-emerald-500/20' }
     ],
     'Frameworks/Libraries': [
-      { name: 'React', logoId: 'flame' },
-      { name: 'Node.js', logoId: 'server' },
-      { name: 'Express', logoId: 'network' },
-      { name: 'Next.js', logoId: 'laptop' },
-      { name: 'TensorFlow', logoId: 'brain' },
-      { name: 'TailwindCSS', logoId: 'fileCode' }
+      { name: 'React', logoId: 'flame', color: 'from-cyan-400/20 to-blue-500/20' },
+      { name: 'Node.js', logoId: 'server', color: 'from-green-400/20 to-green-600/20' },
+      { name: 'Express', logoId: 'network', color: 'from-gray-400/20 to-slate-500/20' },
+      { name: 'Next.js', logoId: 'laptop', color: 'from-slate-400/20 to-gray-500/20' },
+      { name: 'TensorFlow', logoId: 'brain', color: 'from-orange-400/20 to-red-500/20' },
+      { name: 'TailwindCSS', logoId: 'fileCode', color: 'from-teal-400/20 to-cyan-500/20' }
     ],
     Databases: [
-      { name: 'MongoDB', logoId: 'database' },
-      { name: 'MySQL', logoId: 'database' },
-      { name: 'Firebase', logoId: 'flame' }
+      { name: 'MongoDB', logoId: 'database', color: 'from-green-400/20 to-emerald-500/20' },
+      { name: 'MySQL', logoId: 'database', color: 'from-blue-400/20 to-cyan-500/20' },
+      { name: 'Firebase', logoId: 'flame', color: 'from-yellow-400/20 to-orange-500/20' }
     ],
     'Cloud/DevOps': [
-      { name: 'Docker', logoId: 'cloud' },
-      { name: 'GCP', logoId: 'cloud' },
-      { name: 'Git', logoId: 'github' },
-      { name: 'Postman', logoId: 'webhook' },
-      { name: 'VS Code', logoId: 'fileCode' }
+      { name: 'Docker', logoId: 'cloud', color: 'from-blue-400/20 to-indigo-500/20' },
+      { name: 'GCP', logoId: 'cloud', color: 'from-red-400/20 to-pink-500/20' },
+      { name: 'Git', logoId: 'github', color: 'from-gray-400/20 to-slate-500/20' },
+      { name: 'Postman', logoId: 'webhook', color: 'from-orange-400/20 to-red-500/20' },
+      { name: 'VS Code', logoId: 'fileCode', color: 'from-blue-400/20 to-cyan-500/20' }
     ],
     Technologies: [
-      { name: 'REST APIs', logoId: 'webhook' },
-      { name: 'JWT', logoId: 'lock' },
-      { name: 'Blockchain', logoId: 'bitcoin' },
-      { name: 'Ethereum', logoId: 'bitcoin' },
-      { name: 'Puppeteer', logoId: 'compass' },
-      { name: 'OpenCV', logoId: 'eye' },
-      { name: 'YOLOv5', logoId: 'eye' }
+      { name: 'REST APIs', logoId: 'webhook', color: 'from-purple-400/20 to-pink-500/20' },
+      { name: 'JWT', logoId: 'lock', color: 'from-green-400/20 to-emerald-500/20' },
+      { name: 'Blockchain', logoId: 'bitcoin', color: 'from-yellow-400/20 to-orange-500/20' },
+      { name: 'Ethereum', logoId: 'bitcoin', color: 'from-indigo-400/20 to-purple-500/20' },
+      { name: 'Puppeteer', logoId: 'compass', color: 'from-teal-400/20 to-cyan-500/20' },
+      { name: 'OpenCV', logoId: 'eye', color: 'from-red-400/20 to-pink-500/20' },
+      { name: 'YOLOv5', logoId: 'eye', color: 'from-violet-400/20 to-purple-500/20' }
     ],
     'Soft Skills': [
-      { name: 'Problem Solving', logoId: 'hammer' },
-      { name: 'Collaboration', logoId: 'users' },
-      { name: 'Communication', logoId: 'messageSquare' },
-      { name: 'Adaptability', logoId: 'shuffle' }
+      { name: 'Problem Solving', logoId: 'hammer', color: 'from-amber-400/20 to-yellow-500/20' },
+      { name: 'Collaboration', logoId: 'users', color: 'from-blue-400/20 to-indigo-500/20' },
+      { name: 'Communication', logoId: 'messageSquare', color: 'from-green-400/20 to-teal-500/20' },
+      { name: 'Adaptability', logoId: 'shuffle', color: 'from-purple-400/20 to-pink-500/20' }
     ]
   };
 
   const [activeFilter, setActiveFilter] = useState('All');
+  const [isLoaded, setIsLoaded] = useState(false);
   const filters = ['All', ...Object.keys(skills)];
 
   const allSkillsWithCategories = Object.entries(skills).flatMap(([category, skillsList]) =>
@@ -86,7 +87,7 @@ const Skills = () => {
     : allSkillsWithCategories.filter(item => item.category === activeFilter);
 
   const getLogoIcon = (logoId) => {
-    const iconProps = { size: 24, className: "text-white" };
+    const iconProps = { size: 20, className: "text-white" };
     switch (logoId) {
       case 'code': return <Code {...iconProps} />;
       case 'fileCode': return <FileCode {...iconProps} />;
@@ -136,6 +137,11 @@ const Skills = () => {
   };
 
   useEffect(() => {
+    // Trigger animations after component mounts
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+
     checkScrollPosition();
     const el = scrollRef.current;
     if (el) el.addEventListener('scroll', checkScrollPosition);
@@ -143,18 +149,50 @@ const Skills = () => {
   }, []);
 
   return (
-    <section>
+    <section className="relative">
+      {/* CSS for floating animation */}
+      <style jsx>{`
+        @keyframes floatBadge {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(2px, -3px) rotate(0.5deg); }
+          50% { transform: translate(-2px, 2px) rotate(-0.5deg); }
+          75% { transform: translate(1px, 3px) rotate(0.3deg); }
+        }
+        
+        .skill-card {
+          animation: floatBadge 8s infinite ease-in-out;
+        }
+        
+        .skill-card:nth-child(odd) {
+          animation-delay: 0.5s;
+        }
+        
+        .skill-card:nth-child(3n) {
+          animation-delay: 1s;
+        }
+        
+        .skill-card:nth-child(4n) {
+          animation-delay: 1.5s;
+        }
+      `}</style>
+
       <div className="title text-lg font-semibold text-neutral-200 mb-4">Skills</div>
 
       {/* Scrollable Filter Buttons with Arrows */}
       <div className="relative w-full mb-8">
         {showLeft && (
-          <button onClick={scrollLeft} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-neutral-800 hover:bg-neutral-700 p-1.4">
+          <button 
+            onClick={scrollLeft} 
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-1.5 rounded-full transition-all duration-300"
+          >
             <ChevronLeft size={20} className="text-white" />
           </button>
         )}
         {showRight && (
-          <button onClick={scrollRight} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-neutral-800 hover:bg-neutral-700 p-1.4">
+          <button 
+            onClick={scrollRight} 
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-1.5 rounded-full transition-all duration-300"
+          >
             <ChevronRight size={20} className="text-white" />
           </button>
         )}
@@ -167,10 +205,11 @@ const Skills = () => {
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`px-5 py-1 rounded-md text-sm transition-all whitespace-nowrap ${activeFilter === filter
-                    ? 'bg-neutral-700 text-neutral-200 font-semibold'
-                    : 'bg-neutral-800 text-neutral-200 hover:bg-neutral-700'
-                  }`}
+                className={`px-5 py-2 rounded-xl text-sm transition-all whitespace-nowrap border backdrop-blur-sm ${
+                  activeFilter === filter
+                    ? 'bg-white/20 border-white/40 text-white font-semibold shadow-lg'
+                    : 'bg-white/10 border-white/20 text-neutral-200 hover:bg-white/15 hover:border-white/30'
+                }`}
               >
                 {filter}
               </button>
@@ -180,16 +219,26 @@ const Skills = () => {
       </div>
 
       {/* Skills Grid */}
-      <div className="w-full grid grid-cols-2 sm:grid-cols-5 md:grid-cols-7 gap-2">
-        {filteredSkills.map(({ name, logoId }) => (
+      <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+        {filteredSkills.map(({ name, logoId, color }, index) => (
           <div
             key={name}
-            className="w-full bg-neutral-800 p-3 flex flex-col items-center text-center hover:bg-neutral-700 transition-colors rounded"
+            className={`skill-card w-full p-4 rounded-xl border border-white/20 bg-gradient-to-r ${color} flex flex-col items-center text-center cursor-pointer transform ${
+              isLoaded ? "scale-100 opacity-100" : "scale-75 opacity-0"
+            } transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:border-white/40 hover:bg-opacity-30`}
+            style={{
+              transitionDelay: `${index * 0.05}s`,
+              backdropFilter: "blur(12px)",
+              animationDelay: `${index * 0.1}s`,
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+            }}
           >
-            <div className="mb-2 hidden lg:block">
+            <div className="mb-2 flex items-center justify-center">
               {getLogoIcon(logoId)}
             </div>
-            <span className="text-neutral-200">{name}</span>
+            <span className="text-white text-xs sm:text-sm font-semibold leading-tight">
+              {name}
+            </span>
           </div>
         ))}
       </div>
