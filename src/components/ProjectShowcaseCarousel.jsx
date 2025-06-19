@@ -16,7 +16,7 @@ const ProjectShowcaseCarousel = () => {
       description: "A secure and scalable full-stack platform for digital rights management using React, Node.js, and MongoDB. Includes user authentication, role-based access, and a responsive dashboard.",
       repository: "https://github.com/sktigpta/Gdg-Solution-Challenge.git",
       demo: "https://securerights.app/",
-      tech: ["React", "Node.js", "Firebase", "Express", "Tensor Flow", "OpenCV"],
+      tech: ["React", "Node.js", "MongoDB", "Express", "JWT"],
       screenshots: [
         "/projects/securerightshome.png",
         "/projects/securerightsdashboard.png",
@@ -27,7 +27,7 @@ const ProjectShowcaseCarousel = () => {
       description: "A productivity and task management tool with a drag-and-drop interface. Built with modern React practices, including authentication and responsive design.",
       repository: "https://github.com/sktigpta/proofX",
       demo: "https://proof-x-client.vercel.app/",
-      tech: ["React", "Etherium", "Smart Contract", "Vercel", "REST API"],
+      tech: ["React", "JavaScript", "CSS3", "Vercel", "REST API"],
       screenshots: [
         "/projects/proofxdashboard.png",
         "/projects/proofxlogin.png",
@@ -154,12 +154,12 @@ const ProjectShowcaseCarousel = () => {
   };
 
   return (
-    <div className="w-full rounded-lg bg-neutral-900 overflow-hidden shadow-xl">
-      <div className="relative">
+    <div className="w-full rounded-xl bg-white/5 border border-white/20 backdrop-blur-sm overflow-hidden shadow-2xl" style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)' }}>
+        <div className="relative">
         {/* Main Carousel */}
         <div
           ref={carouselRef}
-          className="flex transition-transform duration-500 ease-in-out h-96 w-full cursor-grab relative"
+          className="flex transition-transform duration-500 ease-in-out h-120 w-full cursor-grab relative"
           style={{ transform: `translateX(-${activeSlide * 100}%)` }}
           onMouseDown={handleDragStart}
           onMouseUp={handleDragEnd}
@@ -176,7 +176,7 @@ const ProjectShowcaseCarousel = () => {
             >
               {/* Background Image with Stronger Gradient Overlay */}
               <div
-                className="absolute inset-0 bg-cover bg-center"
+                className="absolute inset-0 bg-cover bg-center scale-110"
                 style={{
                   backgroundImage: `url(${project.screenshots[0]})`,
                   backgroundSize: 'cover',
@@ -196,27 +196,28 @@ const ProjectShowcaseCarousel = () => {
                   <p className="text-sm font-sans opacity-90 mb-3">
                     {project.description}
                   </p>
-                  
+
                   {/* Tech Stack */}
-                  <div className="flex flex-wrap gap-1 mb-3">
+                  <div className="flex flex-wrap gap-1.5 mb-3">
                     {project.tech.map((tech, idx) => (
                       <span
                         key={idx}
-                        className="bg-[#2e2e2e] text-white px-2 py-1 rounded text-xs font-mono"
+                        className="tech-tag bg-white/15 text-white px-2 py-1 rounded-md text-xs font-medium backdrop-blur-sm border border-white/10"
+                        style={{ animationDelay: `${idx * 0.1}s` }}
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
                 </div>
-
+                {/* repo and demo btn  */}
                 <div className="flex space-x-3">
                   {project.repository && (
                     <a
                       href={project.repository}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center bg-white text-black px-3 py-1 rounded-md hover:bg-opacity-90 transition duration-200 text-xs font-medium"
+                      className="flex items-center bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-xl hover:bg-opacity-90 transition duration-200 text-xs font-medium backdrop-blur-sm border border-white/20 hover:border-white/40"
                     >
                       <svg className="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
@@ -230,7 +231,7 @@ const ProjectShowcaseCarousel = () => {
                       href={project.demo}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition duration-200 text-xs font-medium"
+                      className="flex items-center bg-blue-500/30 hover:bg-blue-500/40 text-white px-3 py-1 rounded-xl hover:bg-blue-700 transition duration-200 text-xs font-medium backdrop-blur-sm border border-blue-400/30 hover:border-blue-400/50"
                     >
                       <svg className="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" />
@@ -283,7 +284,7 @@ const ProjectShowcaseCarousel = () => {
         {/* Slide Navigation Arrows */}
         <button
           onClick={prevSlide}
-          className="hidden lg:block absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 w-10 h-10 rounded-full flex items-center justify-center text-white z-20 hover:bg-black/70 transition-all focus:outline-none"
+          className="hidden lg:block absolute left-5.5 top-1/2 transform -translate-y-1/2 bg-white/10 border border-white/20 backdrop-blur-sm w-10 h-10 rounded-full flex items-center justify-center text-white z-20 hover:bg-white/20 transition-all focus:outline-none"
           aria-label="Previous slide"
         >
           <svg className="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -293,7 +294,7 @@ const ProjectShowcaseCarousel = () => {
 
         <button
           onClick={nextSlide}
-          className="hidden lg:block absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 w-10 h-10 rounded-full flex items-center justify-center text-white z-20 hover:bg-black/70 transition-all focus:outline-none"
+          className="hidden lg:block absolute right-5.5 top-1/2 transform -translate-y-1/2 bg-white/10 border border-white/20 backdrop-blur-sm w-10 h-10 rounded-full flex items-center justify-center text-white z-20 hover:bg-white/20 transition-all focus:outline-none"
           aria-label="Next slide"
         >
           <svg className="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -308,11 +309,10 @@ const ProjectShowcaseCarousel = () => {
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  activeSlide === index
-                    ? 'bg-white scale-125'
-                    : 'bg-white/50 scale-100 hover:bg-white/70'
-                }`}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${activeSlide === index
+                  ? 'bg-white scale-125'
+                  : 'bg-white/50 scale-100 hover:bg-white/70'
+                  }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}
@@ -321,7 +321,7 @@ const ProjectShowcaseCarousel = () => {
 
         {/* Play/Pause Button */}
         <button
-          className="absolute top-2 right-2 text-white bg-black/40 p-1 rounded-full z-20 hover:bg-black/60 transition duration-200"
+          className="absolute top-2 right-2 text-white bg-white/10 border border-white/20 backdrop-blur-sm p-1 rounded-full z-20 hover:bg-white/20 transition duration-200"
           onClick={togglePlayPause}
           aria-label={isPaused ? 'Play slideshow' : 'Pause slideshow'}
         >
