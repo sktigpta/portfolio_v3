@@ -16,7 +16,7 @@ const ProjectShowcaseCarousel = () => {
       description: "A secure and scalable full-stack platform for digital rights management using React, Node.js, and MongoDB. Includes user authentication, role-based access, and a responsive dashboard.",
       repository: "https://github.com/sktigpta/Gdg-Solution-Challenge.git",
       demo: "https://securerights.app/",
-      tech: ["React", "Node.js", "MongoDB", "Express", "JWT"],
+      tech: ["React", "Node.js", "Firebase", "Express", "Tensor Flow", "OpenCV"],
       screenshots: [
         "/projects/securerightshome.png",
         "/projects/securerightsdashboard.png",
@@ -27,7 +27,7 @@ const ProjectShowcaseCarousel = () => {
       description: "A productivity and task management tool with a drag-and-drop interface. Built with modern React practices, including authentication and responsive design.",
       repository: "https://github.com/sktigpta/proofX",
       demo: "https://proof-x-client.vercel.app/",
-      tech: ["React", "JavaScript", "CSS3", "Vercel", "REST API"],
+      tech: ["React", "Etherium", "Smart Contract", "Vercel", "REST API"],
       screenshots: [
         "/projects/proofxdashboard.png",
         "/projects/proofxlogin.png",
@@ -286,7 +286,7 @@ const ProjectShowcaseCarousel = () => {
           className="hidden lg:block absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 w-10 h-10 rounded-full flex items-center justify-center text-white z-20 hover:bg-black/70 transition-all focus:outline-none"
           aria-label="Previous slide"
         >
-          <svg className="w-6 h-6 left-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
@@ -296,7 +296,7 @@ const ProjectShowcaseCarousel = () => {
           className="hidden lg:block absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 w-10 h-10 rounded-full flex items-center justify-center text-white z-20 hover:bg-black/70 transition-all focus:outline-none"
           aria-label="Next slide"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
           </svg>
         </button>
