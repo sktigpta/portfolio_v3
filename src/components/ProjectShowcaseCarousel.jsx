@@ -9,13 +9,14 @@ const ProjectShowcaseCarousel = () => {
   const totalSlides = 5;
   const intervalRef = useRef(null);
 
-  // Project content
+  // Project content with tech stacks
   const projectContent = [
     {
       title: "SecureRights",
       description: "A secure and scalable full-stack platform for digital rights management using React, Node.js, and MongoDB. Includes user authentication, role-based access, and a responsive dashboard.",
       repository: "https://github.com/sktigpta/Gdg-Solution-Challenge.git",
       demo: "https://securerights.app/",
+      tech: ["React", "Node.js", "MongoDB", "Express", "JWT"],
       screenshots: [
         "/projects/securerightshome.png",
         "/projects/securerightsdashboard.png",
@@ -26,6 +27,7 @@ const ProjectShowcaseCarousel = () => {
       description: "A productivity and task management tool with a drag-and-drop interface. Built with modern React practices, including authentication and responsive design.",
       repository: "https://github.com/sktigpta/proofX",
       demo: "https://proof-x-client.vercel.app/",
+      tech: ["React", "JavaScript", "CSS3", "Vercel", "REST API"],
       screenshots: [
         "/projects/proofxdashboard.png",
         "/projects/proofxlogin.png",
@@ -36,7 +38,9 @@ const ProjectShowcaseCarousel = () => {
       title: "Farm-floo",
       description: "A modern, responsive farmer-to-customer app with support for product uploads, user profiles, and order requests. Built with a clean UI and dark mode toggle.",
       repository: "https://github.com/sktigpta/Farm-flo",
+      tech: ["React", "Node.js", "Express", "MongoDB", "Tailwind"],
       screenshots: [
+        "https://via.placeholder.com/800x600/1f2937/ffffff?text=Farm-floo+Dashboard"
       ]
     },
     {
@@ -44,6 +48,7 @@ const ProjectShowcaseCarousel = () => {
       description: "A digital rental platform that allows users to find and book rental properties easily. Includes features like authentication, dynamic listings, and user-friendly filtering.",
       repository: "https://github.com/sktigpta?tab=repositories",
       demo: "https://rent-blee-demo.vercel.app",
+      tech: ["React", "Next.js", "Tailwind", "MongoDB", "Vercel"],
       screenshots: [
         "/projects/rentblee/rentbleeHome.png",
         "/projects/rentblee/rentbleeLogin.png",
@@ -55,6 +60,7 @@ const ProjectShowcaseCarousel = () => {
       description: "A command-line based order matching engine built in C++ for processing buy/sell requests with low-latency execution, simulating a real-time trading platform.",
       repository: "https://github.com/yourusername/order-execution-system",
       demo: null,
+      tech: ["C++", "STL", "Algorithms", "Data Structures", "CLI"],
       screenshots: [
         "/projects/ordexecoding.png",
       ]
@@ -183,13 +189,25 @@ const ProjectShowcaseCarousel = () => {
 
               {/* Project Information */}
               <div className="absolute bottom-8 left-6 z-20 text-white max-w-lg">
-                <div className="mb-3">
+                <div className="mb-4">
                   <h3 className="text-xl font-mono font-bold mb-2">
                     {project.title}
                   </h3>
-                  <p className="text-sm font-sans opacity-90">
+                  <p className="text-sm font-sans opacity-90 mb-3">
                     {project.description}
                   </p>
+                  
+                  {/* Tech Stack */}
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {project.tech.map((tech, idx) => (
+                      <span
+                        key={idx}
+                        className="bg-black text-white px-2 py-1 rounded text-xs font-mono"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="flex space-x-3">
@@ -263,17 +281,15 @@ const ProjectShowcaseCarousel = () => {
         </div>
 
         {/* Slide Navigation Arrows */}
-        <div className="relative h-full w-full">
-          <button
-            onClick={prevSlide}
-            className="hidden lg:flex absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 w-10 h-10 rounded-full items-center justify-center text-white z-20 hover:bg-black/70 transition-all focus:outline-none"
-            aria-label="Previous slide"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-        </div>
+        <button
+          onClick={prevSlide}
+          className="hidden lg:block absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 w-10 h-10 rounded-full flex items-center justify-center text-white z-20 hover:bg-black/70 transition-all focus:outline-none"
+          aria-label="Previous slide"
+        >
+          <svg className="w-6 h-6 left-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
 
         <button
           onClick={nextSlide}
@@ -285,19 +301,22 @@ const ProjectShowcaseCarousel = () => {
           </svg>
         </button>
 
-        {/* Dots Navigation */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
-          {[...Array(totalSlides)].map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${activeSlide === index
-                ? 'bg-white scale-100'
-                : 'bg-white/50 scale-75'
+        {/* Fixed Dots Navigation - Perfect Center Alignment */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20">
+          <div className="flex items-center justify-center space-x-2">
+            {[...Array(totalSlides)].map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  activeSlide === index
+                    ? 'bg-white scale-125'
+                    : 'bg-white/50 scale-100 hover:bg-white/70'
                 }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Play/Pause Button */}
