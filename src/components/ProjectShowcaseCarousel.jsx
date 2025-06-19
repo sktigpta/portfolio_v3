@@ -202,7 +202,7 @@ const ProjectShowcaseCarousel = () => {
                     {project.tech.map((tech, idx) => (
                       <span
                         key={idx}
-                        className="bg-black text-white px-2 py-1 rounded text-xs font-mono"
+                        className="bg-[#2e2e2e] text-white px-2 py-1 rounded text-xs font-mono"
                       >
                         {tech}
                       </span>
