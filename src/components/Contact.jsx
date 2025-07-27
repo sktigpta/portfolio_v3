@@ -122,7 +122,7 @@ const ContactPage = () => {
                 <Phone size={20} className="mr-3 text-neutral-400 mt-1" />
                 <div>
                   <h3 className="text-neutral-300 font-medium">Phone</h3>
-                  <p className="text-neutral-400">+91 9123130372</p>
+                  <p className="text-neutral-400">+91 91*#%*&!72</p>
                 </div>
               </div>
 
