@@ -1,7 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Star, Quote } from 'lucide-react';
-import './About.css';
+import React, { useState, useEffect } from 'react';
+import { Quote } from 'lucide-react';
 
 const testimonials = [
   {
@@ -32,108 +30,227 @@ const testimonials = [
 ];
 
 const About = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Auto-carousel effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % testimonials.length);
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+  };
+
   return (
-    <div className="bg-black" style={{
+    <div className="bg-black min-h-screen" style={{
       marginTop: '55px',
       minHeight: 'calc(100vh - 50px)',
-      padding: '2rem 1rem'
+      padding: '1rem 1rem'
     }}>
-      <section style={{
-        width: '100%',
-        maxWidth: '1200px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="mb-8 w-full"
-        >
-          <h2 className="title text-3xl font-bold text-white mb-4">About Me</h2>
-        </motion.div>
+      <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 text-left">
+            About Me
+          </h2>
+        </div>
 
-        <div className="flex flex-col md:flex-row gap-0 md:gap-50 mb-12 w-full items-center md:items-start">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7 }}
-            viewport={{ once: true }}
-          >
-            <div className="w-[50px] h-[50px] md:w-64 md:h-64 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white text-xl md:text-4xl font-bold">
+        {/* Main Content */}
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 mb-12 lg:mb-16 items-start">
+          {/* Avatar */}
+          <div className="flex-shrink-0">
+            <div className="w-32 h-32 md:w-48 md:h-48 lg:w-64 lg:h-64 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl md:text-3xl lg:text-4xl font-bold shadow-2xl">
               SG
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7 }}
-            viewport={{ once: true }}
-            className="flex flex-col justify-center text-center md:text-left mt-4 md:mt-0"
-          >
-            <h3 className="text-2xl font-semibold text-white mb-4">Who I Am</h3>
-            <p className="text-neutral-300 mb-4 leading-relaxed">
-              I’m a passionate frontend developer and UI/UX enthusiast, currently pursuing my B.Tech at
+          {/* Text Content */}
+          <div className="flex flex-col justify-center text-left w-full">
+            <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-4 md:mb-6">
+              Who I Am
+            </h3>
+            <p className="text-neutral-300 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
+              I'm a passionate frontend developer and UI/UX enthusiast, currently pursuing my B.Tech at
               Rungta College of Engineering and Technology. I enjoy turning ideas into interactive, visually
               appealing digital experiences, with a focus on clean code and user-friendly design.
             </p>
-            <p className="text-neutral-300 leading-relaxed">
+            <p className="text-neutral-300 leading-relaxed text-sm md:text-base">
               I specialize in creating responsive web applications and interfaces that blend creativity with
-              functionality. As I progress in my academic journey, I’m constantly exploring new tools and
+              functionality. As I progress in my academic journey, I'm constantly exploring new tools and
               techniques to bridge the gap between design and development.
             </p>
-
-          </motion.div>
+          </div>
         </div>
 
-
         {/* Testimonials Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          viewport={{ once: true }}
-          className="mt-12 w-full"
-        >
-          <div className="mb-8">
-            <h3 className="title text-2xl font-bold text-white">What Others Say About Me</h3>
-            <p className="text-neutral-300">Feedback from colleagues and clients</p>
+        <div className="mt-12 lg:mt-16 w-full">
+          <div className="mb-8 md:mb-12 text-left">
+            <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-2">
+              What Others Say About Me
+            </h3>
+            <p className="text-neutral-300 text-sm md:text-base">
+              Feedback from colleagues and clients
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={testimonial.id}
-                className="bg-neutral-800/50 border border-neutral-700 rounded-lg p-6"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
+          {/* Desktop View - Static grid for 3 or fewer testimonials, carousel for more than 3 */}
+          {testimonials.length <= 3 ? (
+            <div className="hidden lg:grid lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
+              {testimonials.map((testimonial, index) => (
+                <div
+                  key={testimonial.id}
+                  className="bg-neutral-800/50 border border-neutral-700 rounded-lg p-6 hover:bg-neutral-800/70 transition-colors duration-300"
+                >
+                  <div className="mb-4">
+                    <Quote size={24} className="text-blue-400 mb-3" />
+                    <p className="text-neutral-300 italic leading-relaxed text-sm">
+                      {testimonial.text}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                      {testimonial.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h4 className="text-white font-semibold text-sm">{testimonial.name}</h4>
+                      {testimonial.role && (
+                        <p className="text-neutral-400 text-xs">{testimonial.role}</p>
+                      )}
+                      {testimonial.company && (
+                        <p className="text-neutral-500 text-xs">{testimonial.company}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            // Desktop carousel for more than 3 testimonials
+            <div className="hidden lg:block relative">
+              <div className="overflow-hidden rounded-lg">
+                <div 
+                  className="flex transition-transform duration-500 ease-in-out gap-6"
+                  style={{ transform: `translateX(-${currentSlide * (100 / 3)}%)` }}
+                >
+                  {testimonials.map((testimonial) => (
+                    <div
+                      key={testimonial.id}
+                      className="w-1/3 flex-shrink-0"
+                    >
+                      <div className="bg-neutral-800/50 border border-neutral-700 rounded-lg p-6 hover:bg-neutral-800/70 transition-colors duration-300 h-full">
+                        <div className="mb-4">
+                          <Quote size={24} className="text-blue-400 mb-3" />
+                          <p className="text-neutral-300 italic leading-relaxed text-sm">
+                            {testimonial.text}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                            {testimonial.name.charAt(0)}
+                          </div>
+                          <div>
+                            <h4 className="text-white font-semibold text-sm">{testimonial.name}</h4>
+                            {testimonial.role && (
+                              <p className="text-neutral-400 text-xs">{testimonial.role}</p>
+                            )}
+                            {testimonial.company && (
+                              <p className="text-neutral-500 text-xs">{testimonial.company}</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Dots Indicator for Desktop Carousel */}
+              {testimonials.length > 3 && (
+                <div className="flex justify-center mt-6 gap-2">
+                  {Array.from({ length: Math.ceil(testimonials.length - 2) }, (_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={`w-3 h-3 rounded-full transition-colors duration-200 ${
+                        index === currentSlide 
+                          ? 'bg-blue-400' 
+                          : 'bg-neutral-600 hover:bg-neutral-500'
+                      }`}
+                      aria-label={`Go to testimonial group ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Mobile/Tablet Carousel - Always shows one testimonial at a time */}
+          <div className="lg:hidden relative">
+            {/* Carousel Container */}
+            <div className="overflow-hidden rounded-lg">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
               >
-                <div className="mb-4">
-                  <Quote size={24} className="text-blue-400 mb-2" />
-                  <p className="text-neutral-300 italic leading-relaxed">{testimonial.text}</p>
-                </div>
+                {testimonials.map((testimonial) => (
+                  <div
+                    key={testimonial.id}
+                    className="w-full flex-shrink-0"
+                  >
+                    <div className="bg-neutral-800/50 border border-neutral-700 rounded-lg p-4 md:p-6 h-full">
+                      <div className="mb-4">
+                        <Quote size={20} className="text-blue-400 mb-3" />
+                        <p className="text-neutral-300 italic leading-relaxed text-sm md:text-base">
+                          {testimonial.text}
+                        </p>
+                      </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
-                    {testimonial.name.charAt(0)}
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-xs md:text-sm">
+                          {testimonial.name.charAt(0)}
+                        </div>
+                        <div>
+                          <h4 className="text-white font-semibold text-sm md:text-base">
+                            {testimonial.name}
+                          </h4>
+                          {testimonial.role && (
+                            <p className="text-neutral-400 text-xs md:text-sm">{testimonial.role}</p>
+                          )}
+                          {testimonial.company && (
+                            <p className="text-neutral-500 text-xs">{testimonial.company}</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-white font-semibold">{testimonial.name}</h4>
-                    <p className="text-neutral-400 text-sm">{testimonial.role}</p>
-                    <p className="text-neutral-500 text-sm">{testimonial.company}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                ))}
+              </div>
+            </div>
+
+            {/* Dots Indicator for Mobile */}
+            <div className="flex justify-center mt-6 gap-2">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-colors duration-200 ${
+                    index === currentSlide 
+                      ? 'bg-blue-400' 
+                      : 'bg-neutral-600 hover:bg-neutral-500'
+                  }`}
+                  aria-label={`Go to testimonial ${index + 1}`}
+                />
+              ))}
+            </div>
           </div>
-        </motion.div>
-      </section>
+        </div>
+      </div>
     </div>
   );
 };

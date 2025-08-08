@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Calendar, Clock, Tag, ExternalLink, Loader2, BookOpen } from 'lucide-react';
+import { Calendar, Clock, Tag, ExternalLink, Loader2, BookOpen, ArrowLeft } from 'lucide-react';
 
 const BlogPage = () => {
   const [filter, setFilter] = useState('All');
@@ -8,10 +8,7 @@ const BlogPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isSticky, setIsSticky] = useState(false);
-  const scrollRef = useRef(null);
   const titleRef = useRef(null);
-  const [showLeft, setShowLeft] = useState(false);
-  const [showRight, setShowRight] = useState(true);
 
   const filters = ['All', 'Recent', 'Featured', 'Technology', 'Design', 'Development'];
 
@@ -202,29 +199,6 @@ const BlogPage = () => {
     return `${minutes} min read`;
   };
 
-  // Scroll functionality
-  const checkScrollPosition = () => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setShowLeft(el.scrollLeft > 0);
-    setShowRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
-  };
-
-  const scrollLeft = () => {
-    scrollRef.current.scrollBy({ left: -150, behavior: 'smooth' });
-  };
-
-  const scrollRight = () => {
-    scrollRef.current.scrollBy({ left: 150, behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    checkScrollPosition();
-    const el = scrollRef.current;
-    if (el) el.addEventListener('scroll', checkScrollPosition);
-    return () => el?.removeEventListener('scroll', checkScrollPosition);
-  }, []);
-
   const handleBlogClick = (blog) => {
     setSelectedBlog(blog);
     setIsSticky(false);
@@ -246,13 +220,13 @@ const BlogPage = () => {
               : 'hidden'
             } transition-all duration-300`}
         >
-          <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-center gap-2">
+          <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-2 flex items-center justify-center gap-2">
             <button
               onClick={handleBackClick}
               className="flex-shrink-0 text-blue-400 hover:text-blue-300 transition-colors flex items-center justify-center"
               style={{ transform: 'translateY(1px)' }}
             >
-              <ChevronLeft size={24} />
+              <ArrowLeft size={24} />
             </button>
             <div className="flex-1 min-w-0 flex items-center">
               <h2 className="text-lg font-semibold text-white break-words">
@@ -263,20 +237,19 @@ const BlogPage = () => {
         </div>
 
         {/* Main Content */}
-        <div className="pt-[50px]">
-          <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="pt-[0px]">
+          <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-8">
             {/* Header Section with Back Button and Title */}
             <div ref={titleRef} className="mb-8">
-              <div className="flex items-center justify-center gap-2">
+              <div className="flex items-start gap-4">
                 <button
                   onClick={handleBackClick}
-                  className="flex-shrink-0 text-blue-400 hover:text-blue-300 transition-colors flex items-center justify-center"
-                  style={{ transform: 'translateY(2px)' }}
+                  className="flex-shrink-0 text-blue-400 hover:text-blue-300 transition-colors flex items-center justify-center mt-1"
                 >
-                  <ChevronLeft size={28} />
+                  <ArrowLeft size={28} />
                 </button>
-                <div className="flex-1 min-w-0  justify-center">
-                  <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight">
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight text-left">
                     {selectedBlog.title}
                   </h1>
                 </div>
@@ -291,7 +264,7 @@ const BlogPage = () => {
                   <img
                     src={selectedBlog.images[0].url}
                     alt={selectedBlog.title}
-                    className="w-full h-64 md:h-96 object-cover rounded-lg"
+                    className="w-full h-48 md:h-64 lg:h-96 object-cover rounded-lg"
                     onError={(e) => { e.target.style.display = 'none'; }}
                   />
                 </div>
@@ -338,7 +311,7 @@ const BlogPage = () => {
 
               {/* Blog content */}
               <div className="prose prose-invert prose-lg max-w-none">
-                <div className="text-neutral-300 leading-relaxed text-lg">
+                <div className="text-neutral-300 leading-relaxed text-base md:text-lg">
                   <div
                     dangerouslySetInnerHTML={{ __html: selectedBlog.content }}
                     className="space-y-4"
@@ -356,58 +329,32 @@ const BlogPage = () => {
   return (
     <div className="bg-black min-h-screen">
       <div className="pt-[50px]">
-        <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-8">
           {/* Header */}
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-white mb-4">Blog</h2>
-            <p className="text-neutral-300">Latest thoughts and insights</p>
+          <div className="mb-8 text-left">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">Blog</h2>
+            <p className="text-neutral-300 text-sm md:text-base">Latest thoughts and insights</p>
           </div>
 
-          {/* Scrollable Filter Buttons with Arrows */}
-          <div className="relative w-full mb-8">
-            {showLeft && (
-              <button
-                onClick={scrollLeft}
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-1.5 rounded-full transition-all duration-300 hover:scale-110"
-                aria-label="Scroll filters left"
-              >
-                <ChevronLeft size={20} className="text-white" />
-              </button>
-            )}
-
-            {showRight && (
-              <button
-                onClick={scrollRight}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-1.5 rounded-full transition-all duration-300 hover:scale-110"
-                aria-label="Scroll filters right"
-              >
-                <ChevronRight size={20} className="text-white" />
-              </button>
-            )}
-
-            <div
-              ref={scrollRef}
-              className="overflow-x-auto scrollbar-hide"
-              role="tablist"
-              aria-label="Blog category filters"
-            >
-              <div className="inline-flex gap-2">
-                {filters.map((filterName) => (
-                  <button
-                    key={filterName}
-                    onClick={() => setFilter(filterName)}
-                    className={`px-5 py-2 rounded-xl text-sm transition-all whitespace-nowrap border backdrop-blur-sm hover:scale-105 ${filter === filterName
-                        ? 'bg-white/20 border-white/40 text-white font-semibold shadow-lg'
-                        : 'bg-white/10 border-white/20 text-neutral-200 hover:bg-white/15 hover:border-white/30'
-                      }`}
-                    role="tab"
-                    aria-selected={filter === filterName}
-                    aria-label={`Filter by ${filterName} posts`}
-                  >
-                    {filterName}
-                  </button>
-                ))}
-              </div>
+          {/* Filter Buttons - Simple Column Layout */}
+          <div className="mb-8">
+            <div className="flex flex-wrap gap-2">
+              {filters.map((filterName) => (
+                <button
+                  key={filterName}
+                  onClick={() => setFilter(filterName)}
+                  className={`px-4 py-2 rounded-xl text-sm transition-all border backdrop-blur-sm hover:scale-105 ${
+                    filter === filterName
+                      ? 'bg-white/20 border-white/40 text-white font-semibold shadow-lg'
+                      : 'bg-white/10 border-white/20 text-neutral-200 hover:bg-white/15 hover:border-white/30'
+                  }`}
+                  role="tab"
+                  aria-selected={filter === filterName}
+                  aria-label={`Filter by ${filterName} posts`}
+                >
+                  {filterName}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -471,14 +418,14 @@ const BlogPage = () => {
                 </div>
               ) : (
                 <>
-                  <div className="mb-6">
+                  <div className="mb-6 text-left">
                     <div className="text-neutral-400 text-sm">
                       Found {filteredPosts.length} post{filteredPosts.length !== 1 ? 's' : ''}
                       {filter !== 'All' && ` (${filter} filter)`}
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {filteredPosts.map((post, index) => (
                       <article
                         key={post.id}
@@ -507,11 +454,11 @@ const BlogPage = () => {
                             <span>{estimateReadTime(post.content)}</span>
                           </div>
 
-                          <h3 className="text-xl font-semibold text-white mb-3 line-clamp-2 hover:text-blue-300 transition-colors">
+                          <h3 className="text-lg md:text-xl font-semibold text-white mb-3 line-clamp-2 hover:text-blue-300 transition-colors">
                             {post.title || 'Untitled Post'}
                           </h3>
 
-                          <p className="text-neutral-300 mb-4 line-clamp-3 leading-relaxed">
+                          <p className="text-neutral-300 mb-4 line-clamp-3 leading-relaxed text-sm md:text-base">
                             {truncateText(stripHtmlTags(post.content))}
                           </p>
 
@@ -537,7 +484,7 @@ const BlogPage = () => {
                           <div className="mt-4 pt-4 border-t border-neutral-700">
                             <span className="text-blue-400 text-sm flex items-center gap-1 hover:text-blue-300">
                               Read more
-                              <ChevronLeft size={14} className="rotate-180" />
+                              <ArrowLeft size={14} className="rotate-180" />
                             </span>
                           </div>
                         </div>
