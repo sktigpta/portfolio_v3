@@ -78,13 +78,6 @@ const Navbar = ({ activeSection, scrolled, navigateToSection, navItems }) => {
     })
   };
   
-  // Navigation items - now passed as prop
-  // const navItems = [
-  //   { name: 'home', label: 'Home' },
-  //   { name: 'skills', label: 'Skills' },
-  //   { name: 'projects', label: 'Projects' }
-  // ];
-
   // Handle navigation
   const handleNavigation = (sectionId) => {
     if (sectionId === 'blog') {

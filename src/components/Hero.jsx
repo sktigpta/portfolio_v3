@@ -1,11 +1,7 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { FaGithub, FaLinkedinIn, FaTwitter, FaDribbble } from "react-icons/fa"
 import { FaReact, FaNodeJs, FaFigma, FaAws } from "react-icons/fa"
 import { SiTensorflow } from "react-icons/si"
-
-
 
 function Hero({ navigateToSection }) {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -102,9 +98,9 @@ function Hero({ navigateToSection }) {
         {/* Profile Picture */}
         <div className={`mb-2 flex justify-center transform ${isLoaded ? "scale-100 opacity-100" : "scale-75 opacity-0"} transition-all duration-1000 ease-out delay-200`}>
           <div className="relative">
-            <img 
-              src="/projects/profile/profile.png" 
-              alt="Shaktidhar Gupta" 
+            <img
+              src="/projects/profile/profile.png"
+              alt="Shaktidhar Gupta"
               className="w-[100px] h-[100px] rounded-full object-cover border-1 border-white/20 shadow-lg"
               onError={(e) => {
                 console.error('Failed to load profile image:', e.target.src);
@@ -159,9 +155,11 @@ function Hero({ navigateToSection }) {
             style={{
               top: `${15 + (i * 4) % 70}%`,
               left: `${10 + (i * 5) % 80}%`,
-              animationDelay: `${i * 0.4}s`,
-              filter: 'blur(1px)'
+              animation: `floatBadge 8s ease-in-out infinite`,
+              animationDelay: `${i * 0.6}s`,
+              filter: `blur(${1 + (i % 3) * 0.5}px)`
             }}
+
           >
             <div
               className="w-full h-full border border-blue-300/40 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full backdrop-blur-sm"
