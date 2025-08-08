@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Quote } from 'lucide-react';
+import { Quote, Download, FileText, CheckCircle } from 'lucide-react';
 
 const testimonials = [
   {
@@ -31,15 +31,40 @@ const testimonials = [
 
 const About = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadSuccess, setDownloadSuccess] = useState(false);
 
   // Auto-carousel effect
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % testimonials.length);
-    }, 5000); // Change slide every 5 seconds
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
+
+  const handleDownloadCV = () => {
+    setIsDownloading(true);
+    setDownloadSuccess(false);
+
+    // Simulate slight delay for loading spinner
+    setTimeout(() => {
+      const link = document.createElement('a');
+      link.href = '/cv.pdf'; // Path to your CV in the public folder
+      link.download = 'Shaktidhar_Gupta_CV.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      setIsDownloading(false);
+      setDownloadSuccess(true);
+
+      // Reset success message after 3 seconds
+      setTimeout(() => {
+        setDownloadSuccess(false);
+      }, 3000);
+    }, 500); // optional delay for smoother animation
+  };
 
   const goToSlide = (index) => {
     setCurrentSlide(index);
@@ -78,11 +103,61 @@ const About = () => {
               Rungta College of Engineering and Technology. I enjoy turning ideas into interactive, visually
               appealing digital experiences, with a focus on clean code and user-friendly design.
             </p>
-            <p className="text-neutral-300 leading-relaxed text-sm md:text-base">
+            <p className="text-neutral-300 leading-relaxed text-sm md:text-base mb-6 md:mb-8">
               I specialize in creating responsive web applications and interfaces that blend creativity with
               functionality. As I progress in my academic journey, I'm constantly exploring new tools and
               techniques to bridge the gap between design and development.
             </p>
+
+            {/* Download CV Section */}
+            <div className="bg-neutral-800/30 border border-neutral-700 rounded-lg p-6 mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+
+              {/* Left Side: Title + Description */}
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <FileText className="text-blue-400" size={24} />
+                  <h4 className="text-white font-semibold text-lg">Download My Resume</h4>
+                </div>
+                <p className="text-neutral-300 text-sm">
+                  Get a detailed overview of my skills, experience, and projects in PDF format.
+                </p>
+              </div>
+
+              {/* Right Side: Download Button */}
+              <div className="flex items-center justify-center">
+                <button
+                  onClick={handleDownloadCV}
+                  disabled={isDownloading}
+                  className={`
+        w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-200
+        ${isDownloading
+                      ? 'bg-blue-500/50 text-white cursor-not-allowed'
+                      : downloadSuccess
+                        ? 'bg-green-600 text-white'
+                        : 'bg-blue-600 hover:bg-blue-500 text-white hover:shadow-lg hover:shadow-blue-500/25'
+                    }
+      `}
+                >
+                  {isDownloading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Preparing Download...
+                    </>
+                  ) : downloadSuccess ? (
+                    <>
+                      <CheckCircle size={18} />
+                      Downloaded Successfully!
+                    </>
+                  ) : (
+                    <>
+                      <Download size={18} />
+                      Download CV
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -133,7 +208,7 @@ const About = () => {
             // Desktop carousel for more than 3 testimonials
             <div className="hidden lg:block relative">
               <div className="overflow-hidden rounded-lg">
-                <div 
+                <div
                   className="flex transition-transform duration-500 ease-in-out gap-6"
                   style={{ transform: `translateX(-${currentSlide * (100 / 3)}%)` }}
                 >
@@ -177,11 +252,10 @@ const About = () => {
                     <button
                       key={index}
                       onClick={() => setCurrentSlide(index)}
-                      className={`w-3 h-3 rounded-full transition-colors duration-200 ${
-                        index === currentSlide 
-                          ? 'bg-blue-400' 
-                          : 'bg-neutral-600 hover:bg-neutral-500'
-                      }`}
+                      className={`w-3 h-3 rounded-full transition-colors duration-200 ${index === currentSlide
+                        ? 'bg-blue-400'
+                        : 'bg-neutral-600 hover:bg-neutral-500'
+                        }`}
                       aria-label={`Go to testimonial group ${index + 1}`}
                     />
                   ))}
@@ -194,7 +268,7 @@ const About = () => {
           <div className="lg:hidden relative">
             {/* Carousel Container */}
             <div className="overflow-hidden rounded-lg">
-              <div 
+              <div
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${currentSlide * 100}%)` }}
               >
@@ -239,11 +313,10 @@ const About = () => {
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-colors duration-200 ${
-                    index === currentSlide 
-                      ? 'bg-blue-400' 
-                      : 'bg-neutral-600 hover:bg-neutral-500'
-                  }`}
+                  className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-colors duration-200 ${index === currentSlide
+                    ? 'bg-blue-400'
+                    : 'bg-neutral-600 hover:bg-neutral-500'
+                    }`}
                   aria-label={`Go to testimonial ${index + 1}`}
                 />
               ))}
