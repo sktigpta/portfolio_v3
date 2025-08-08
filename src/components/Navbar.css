@@ -178,18 +178,17 @@
   z-index: 10;
   padding: 2rem 1rem;
   box-sizing: border-box;
+  width: 100vw;
 }
 
 .mobile-nav-links {
   list-style: none;
-  padding: 0;
-  margin: 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 2rem;
   text-align: center;
   width: 100%;
-  max-width: 300px;
+  justify-content: center;
 }
 
 .mobile-nav-links li {
@@ -231,13 +230,11 @@
     display: block;
   }
   
-  /* Make contact button smaller on mobile but keep it visible */
   .contact-button {
     font-size: 0.8rem;
     padding: 0.4rem 0.8rem;
   }
 
-  /* Ensure mobile menu doesn't overflow */
   .mobile-menu-overlay {
     padding: 1rem;
     overflow-y: auto;
@@ -245,7 +242,7 @@
 
   .mobile-nav-links {
     gap: 1.5rem;
-    max-width: 250px;
+    width: 100%;
   }
 
   .mobile-nav-links a {
@@ -284,7 +281,7 @@
 
   .mobile-nav-links {
     gap: 1rem;
-    max-width: 200px;
+    width: 100%;
   }
 }
 
@@ -304,7 +301,7 @@
   }
 
   .mobile-nav-links {
-    max-width: 180px;
+    width: 100%;
   }
 
   .mobile-nav-links a {

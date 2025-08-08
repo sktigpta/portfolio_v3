@@ -86,7 +86,6 @@ const Navbar = ({ activeSection, scrolled, navigateToSection, navItems }) => {
       navigate('/about');
     } else if (sectionId === 'home') {
       navigate('/');
-      // Scroll to top after navigation
       setTimeout(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 100);
@@ -99,7 +98,6 @@ const Navbar = ({ activeSection, scrolled, navigateToSection, navItems }) => {
   // Handle logo click
   const handleLogoClick = () => {
     navigate('/');
-    // Scroll to top after navigation
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 100);
@@ -165,7 +163,6 @@ const Navbar = ({ activeSection, scrolled, navigateToSection, navItems }) => {
             ))}
           </ul>
 
-          {/* Contact button - for desktop */}
           <motion.div 
             className="contact-button-container"
             initial={{ opacity: 0 }}
@@ -184,7 +181,6 @@ const Navbar = ({ activeSection, scrolled, navigateToSection, navItems }) => {
 
         {/* Mobile controls container */}
         <div className="mobile-controls">
-          {/* Contact button for mobile */}
           <motion.div 
             className="contact-button-container"
             initial={{ opacity: 0 }}
@@ -200,7 +196,6 @@ const Navbar = ({ activeSection, scrolled, navigateToSection, navItems }) => {
             </button>
           </motion.div>
           
-          {/* Hamburger button */}
           <button 
             className="hamburger-button" 
             onClick={toggleMenu}
@@ -257,25 +252,6 @@ const Navbar = ({ activeSection, scrolled, navigateToSection, navItems }) => {
                     </button>
                   </motion.li>
                 ))}
-                <motion.li
-                  custom={navItems.length}
-                  variants={menuItemVariants}
-                >
-                  <button
-                    className={currentActiveSection === 'contact' ? 'active' : ''}
-                    onClick={() => handleNavigation('contact')}
-                    aria-label="Navigate to Contact"
-                  >
-                    Contact
-                    {currentActiveSection === 'contact' && (
-                      <motion.div 
-                        className="active-indicator-mobile" 
-                        layoutId="mobileActiveIndicator"
-                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                      />
-                    )}
-                  </button>
-                </motion.li>
               </ul>
             </motion.div>
           )}
