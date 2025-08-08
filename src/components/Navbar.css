@@ -1,0 +1,313 @@
+:root {
+  --navbar-height: 50px;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --accent-color: #0071e3;
+  --transition-default: all 0.3s ease;
+  --blur-amount: 15px;
+  --background-transparent: rgba(0, 0, 0, 0);
+  --background-translucent: rgba(0, 0, 0, 0.8);
+  --contact-button-bg: rgba(255, 255, 255, 0.15);
+  --contact-button-hover: rgba(255, 255, 255, 0.25);
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: var(--navbar-height);
+  color: var(--text-primary);
+  z-index: 1000;
+  transition: var(--transition-default);
+  backdrop-filter: blur(var(--blur-amount));
+  -webkit-backdrop-filter: blur(var(--blur-amount));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+}
+
+.navbar.scrolled {
+  background-color: var(--background-translucent);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;  
+  border-bottom: 1px solid var(--border-color);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.logo svg {
+  height: 20px;
+  width: auto;
+}
+
+.logo-text {
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1rem;
+}
+
+.nav-items-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.navbar-links {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  gap: 2rem;
+}
+
+.navbar-links li {
+  position: relative;
+}
+
+.navbar-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  position: relative;
+  transition: var(--transition-default);
+  padding: 0.5rem 0;
+}
+
+.navbar-links a:hover {
+  color: var(--text-primary);
+}
+
+.navbar-links a.active {
+  color: var(--text-primary);
+}
+
+.active-indicator {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--accent-color);
+  border-radius: 1px;
+}
+
+.active-indicator-mobile {
+  position: absolute;
+  bottom: -8px;
+  left: 25%;
+  right: 25%;
+  height: 2px;
+  background-color: var(--accent-color);
+  border-radius: 1px;
+}
+
+.contact-button-container {
+  display: flex;
+  align-items: center;
+}
+
+.contact-button {
+  background-color: var(--contact-button-bg);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.2rem 1rem;
+  border-radius: 4px;
+  transition: var(--transition-default);
+  letter-spacing: 0.02em;
+}
+
+.contact-button:hover {
+  background-color: var(--contact-button-hover);
+}
+
+.mobile-controls {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hamburger-button {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 15;
+  color: var(--text-primary);
+}
+
+.hamburger-icon {
+  display: block;
+}
+
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--background-translucent);
+  backdrop-filter: blur(var(--blur-amount));
+  -webkit-backdrop-filter: blur(var(--blur-amount));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+.mobile-nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  text-align: center;
+  width: 100%;
+  max-width: 300px;
+}
+
+.mobile-nav-links li {
+  position: relative;
+}
+
+.mobile-nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  position: relative;
+  padding: 0.5rem;
+  transition: var(--transition-default);
+  display: inline-block;
+}
+
+.mobile-nav-links a:hover,
+.mobile-nav-links a.active {
+  color: var(--text-primary);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 0 0.5rem;
+  }
+  
+  .nav-items-container {
+    display: none;
+  }
+
+  .mobile-controls {
+    display: flex;
+  }
+
+  .hamburger-button {
+    display: block;
+  }
+  
+  /* Make contact button smaller on mobile but keep it visible */
+  .contact-button {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  /* Ensure mobile menu doesn't overflow */
+  .mobile-menu-overlay {
+    padding: 1rem;
+    overflow-y: auto;
+  }
+
+  .mobile-nav-links {
+    gap: 1.5rem;
+    max-width: 250px;
+  }
+
+  .mobile-nav-links a {
+    font-size: 1.1rem;
+    padding: 0.75rem;
+  }
+}
+
+/* Small screens */
+@media (max-width: 480px) {
+  .navbar {
+    height: 50px;
+    padding: 0 0.5rem;
+  }
+  
+  .logo-text {
+    font-size: 0.9rem;
+  }
+  
+  .logo svg {
+    height: 16px;
+  }
+  
+  .contact-button {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.7rem;
+  }
+  
+  .mobile-nav-links a {
+    font-size: 1rem;
+  }
+
+  .mobile-menu-overlay {
+    padding: 0.5rem;
+  }
+
+  .mobile-nav-links {
+    gap: 1rem;
+    max-width: 200px;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 360px) {
+  .navbar-container {
+    padding: 0 0.25rem;
+  }
+
+  .logo-text {
+    font-size: 0.8rem;
+  }
+
+  .contact-button {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .mobile-nav-links {
+    max-width: 180px;
+  }
+
+  .mobile-nav-links a {
+    font-size: 0.9rem;
+  }
+}
