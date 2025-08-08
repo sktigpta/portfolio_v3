@@ -42,9 +42,6 @@ section {
 }
 
 @media (max-width: 768px) {
-    main {
-        padding-top: 70px;
-    }
 
     section {
         padding: 30px 15px;
@@ -52,9 +49,6 @@ section {
 }
 
 @media (max-width: 480px) {
-    main {
-        padding-top: 80px;
-    }
 
     section {
         padding: 20px 10px;
