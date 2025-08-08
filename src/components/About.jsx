@@ -88,9 +88,21 @@ const About = () => {
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 mb-12 lg:mb-16 items-start">
           {/* Avatar */}
           <div className="flex-shrink-0">
-            <div className="w-32 h-32 md:w-48 md:h-48 lg:w-64 lg:h-64 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl md:text-3xl lg:text-4xl font-bold shadow-2xl">
+            <div className="relative flex">
+            <img
+              src="/projects/profile/profile.png"
+              alt="Shaktidhar Gupta"
+              className="w-[300px] h-[300px] rounded-full object-cover border-1 border-white/20 shadow-lg"
+              onError={(e) => {
+                console.error('Failed to load profile image:', e.target.src);
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'flex';
+              }}
+            />
+            <div className="w-[100px] h-[100px] rounded-full bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center text-white font-bold text-2xl border-2 border-white/20 shadow-lg" style={{ display: 'none' }}>
               SG
             </div>
+          </div>
           </div>
 
           {/* Text Content */}
