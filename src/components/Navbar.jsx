@@ -78,29 +78,56 @@ const Navbar = ({ activeSection, scrolled, navigateToSection, navItems }) => {
     })
   };
   
-  // Handle navigation
+  // Enhanced navigation handler with cross-route support
   const handleNavigation = (sectionId) => {
+    const isOnHomePage = location.pathname === '/';
+    const homeSections = ['home', 'skills', 'projects', 'contact'];
+    
     if (sectionId === 'blog') {
       navigate('/blog');
     } else if (sectionId === 'about') {
       navigate('/about');
     } else if (sectionId === 'home') {
-      navigate('/');
-      setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 100);
-    } else {
-      navigateToSection(sectionId);
+      if (!isOnHomePage) {
+        navigate('/');
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 100);
+      } else {
+        navigateToSection(sectionId);
+      }
+    } else if (homeSections.includes(sectionId)) {
+      // For skills, projects, contact - always navigate to home first if not already there
+      if (!isOnHomePage) {
+        navigate('/');
+        // Wait for navigation to complete, then scroll to section
+        setTimeout(() => {
+          const element = document.getElementById(sectionId);
+          if (element) {
+            element.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        }, 200); // Increased timeout to ensure page loads
+      } else {
+        // Already on home page, just scroll to section
+        navigateToSection(sectionId);
+      }
     }
     setIsMenuOpen(false);
   };
 
   // Handle logo click
   const handleLogoClick = () => {
-    navigate('/');
-    setTimeout(() => {
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+    } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 100);
+    }
     setIsMenuOpen(false);
   };
   
@@ -108,7 +135,9 @@ const Navbar = ({ activeSection, scrolled, navigateToSection, navItems }) => {
   const getCurrentActiveSection = () => {
     if (location.pathname === '/blog') return 'blog';
     if (location.pathname === '/about') return 'about';
-    return activeSection;
+    // Only return activeSection if we're on the home page
+    if (location.pathname === '/') return activeSection;
+    return 'home'; // Default fallback
   };
 
   const currentActiveSection = getCurrentActiveSection();

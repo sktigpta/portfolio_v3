@@ -9,21 +9,32 @@ function Hero({ navigateToSection }) {
     typeof window !== "undefined" ? window.innerWidth : 1200
   )
 
-  // Create particles with random positions, animations, opacity and blinking effect
+  // Reduced particle count for mobile
+  const getParticleCount = () => {
+    if (windowWidth <= 768) return 15 // Much fewer particles on mobile
+    return 45 // Reduced from 60 for better performance
+  }
+
+  const getBackgroundParticleCount = () => {
+    if (windowWidth <= 768) return 5 // Much fewer background particles on mobile
+    return 15 // Reduced from 25
+  }
+
+  // Create particles with random positions, animations, opacity and enhanced movement
   const generateParticles = (count) => {
     return Array.from({ length: count }, (_, i) => ({
       id: i,
       top: Math.random() * 100,
       left: Math.random() * 100,
-      size: 1 + Math.random() * 5, // More variable size between 1-6px
+      size: 1 + Math.random() * (windowWidth <= 768 ? 3 : 5), // Smaller on mobile
       delay: Math.random() * 5,
-      duration: 15 + Math.random() * 30, // Longer, more varied durations
+      duration: 10 + Math.random() * 20, // Shorter durations for better performance
       blinkDelay: Math.random() * 5,
-      blinkDuration: 0.5 + Math.random() * 4, // More varied blinking
-      opacity: 0.2 + Math.random() * 0.8, // Random opacity between 0.2 and 1
-      movementRange: 30 + Math.random() * 70, // Random movement range
-      movementDirection: Math.random() > 0.5 ? 1 : -1, // Random direction
-      movementAxis: Math.random() > 0.5 ? 'horizontal' : 'vertical' // Random axis
+      blinkDuration: 1 + Math.random() * 3,
+      baseOpacity: 0.3 + Math.random() * 0.7,
+      movementRange: windowWidth <= 768 ? 20 + Math.random() * 30 : 30 + Math.random() * 70,
+      movementDirection: Math.random() > 0.5 ? 1 : -1,
+      movementAxis: Math.random() > 0.5 ? 'horizontal' : 'vertical'
     }))
   }
 
@@ -33,17 +44,17 @@ function Hero({ navigateToSection }) {
       id: i,
       top: Math.random() * 100,
       left: Math.random() * 100,
-      size: 8 + Math.random() * 20, // Larger particles for background
+      size: windowWidth <= 768 ? 6 + Math.random() * 12 : 8 + Math.random() * 20,
       delay: Math.random() * 10,
-      duration: 20 + Math.random() * 40,
-      opacity: 0.1 + Math.random() * 0.3,
-      moveX: (Math.random() - 0.5) * 200,
-      moveY: (Math.random() - 0.5) * 200
+      duration: 15 + Math.random() * 25, // Shorter for mobile
+      opacity: 0.1 + Math.random() * 0.2, // Lower opacity
+      moveX: (Math.random() - 0.5) * (windowWidth <= 768 ? 100 : 200),
+      moveY: (Math.random() - 0.5) * (windowWidth <= 768 ? 100 : 200)
     }))
   }
 
-  const [particles, setParticles] = useState(() => generateParticles(60)) // Increased particle count
-  const [backgroundParticles, setBackgroundParticles] = useState(() => generateBackgroundParticles(25))
+  const [particles, setParticles] = useState(() => generateParticles(getParticleCount()))
+  const [backgroundParticles, setBackgroundParticles] = useState(() => generateBackgroundParticles(getBackgroundParticleCount()))
 
   useEffect(() => {
     // Trigger animations after component mounts
@@ -53,45 +64,52 @@ function Hero({ navigateToSection }) {
 
     // Track window size for responsive design
     const handleResize = () => {
-      setWindowWidth(window.innerWidth)
+      const newWidth = window.innerWidth
+      setWindowWidth(newWidth)
+      // Regenerate particles on resize for better performance
+      setParticles(generateParticles(newWidth <= 768 ? 15 : 45))
+      setBackgroundParticles(generateBackgroundParticles(newWidth <= 768 ? 5 : 15))
     }
 
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
   }, [])
+
   return (
     <div className={`relative h-screen w-full flex items-center justify-center overflow-hidden bg-black text-white ${isLoaded ? "opacity-100" : "opacity-0"} transition-opacity duration-1000`}>
 
-      {/* Blurred Background Layer */}
-      <div className="absolute inset-0 backdrop-blur-3xl bg-black/30"></div>
+      {/* Simplified blur background for mobile */}
+      <div className={`absolute inset-0 ${windowWidth <= 768 ? 'backdrop-blur-xl' : 'backdrop-blur-3xl'} bg-black/30`}></div>
 
-      {/* Background Particles with Blur Effect */}
-      <div className="absolute w-full h-full pointer-events-none">
-        {backgroundParticles.map((particle) => (
-          <div
-            key={`bg-${particle.id}`}
-            className={`absolute transform ${isLoaded ? "scale-100" : "scale-0"} transition-all duration-700`}
-            style={{
-              top: `${particle.top}%`,
-              left: `${particle.left}%`,
-              width: `${particle.size}px`,
-              height: `${particle.size}px`,
-              transitionDelay: `${particle.delay * 0.05}s`,
-              animation: `bgFloat ${particle.duration}s infinite ease-in-out`,
-              animationDelay: `${particle.delay}s`,
-              filter: 'blur(8px)',
-              opacity: particle.opacity,
-            }}
-          >
+      {/* Background Particles with Blur Effect - Disabled on mobile for performance */}
+      {windowWidth > 768 && (
+        <div className="absolute w-full h-full pointer-events-none">
+          {backgroundParticles.map((particle) => (
             <div
-              className="w-full h-full rounded-full bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20"
+              key={`bg-${particle.id}`}
+              className={`absolute transform ${isLoaded ? "scale-100" : "scale-0"} transition-all duration-700`}
               style={{
-                boxShadow: `0 0 ${particle.size * 2}px rgba(147, 197, 253, 0.3)`
+                top: `${particle.top}%`,
+                left: `${particle.left}%`,
+                width: `${particle.size}px`,
+                height: `${particle.size}px`,
+                transitionDelay: `${particle.delay * 0.05}s`,
+                animation: `bgFloat ${particle.duration}s infinite ease-in-out`,
+                animationDelay: `${particle.delay}s`,
+                filter: 'blur(8px)',
+                opacity: particle.opacity,
               }}
-            ></div>
-          </div>
-        ))}
-      </div>
+            >
+              <div
+                className="w-full h-full rounded-full bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20"
+                style={{
+                  boxShadow: `0 0 ${particle.size * 2}px rgba(147, 197, 253, 0.3)`
+                }}
+              ></div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Main content */}
       <div className={`relative z-20 text-center max-w-3xl px-5 transform ${isLoaded ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"} transition-all duration-1000 ease-out`}>
@@ -104,37 +122,35 @@ function Hero({ navigateToSection }) {
               className="w-[100px] h-[100px] rounded-full object-cover border-1 border-white/20 shadow-lg"
               onError={(e) => {
                 console.error('Failed to load profile image:', e.target.src);
-                // Fallback to initials if image fails to load
                 e.target.style.display = 'none';
                 e.target.nextSibling.style.display = 'flex';
               }}
             />
-            <div className="w-[34px] h-[34px] rounded-full bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center text-white font-bold text-sm border-2 border-white/20 shadow-lg" style={{ display: 'none' }}>
+            <div className="w-[100px] h-[100px] rounded-full bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center text-white font-bold text-2xl border-2 border-white/20 shadow-lg" style={{ display: 'none' }}>
               SG
             </div>
           </div>
         </div>
 
         <div className="mb-5 flex justify-center overflow-hidden">
-          <h1 className={`text-5xl md:text-6xl font-extrabold tracking-tighter transform ${isLoaded ? "translate-y-0" : "translate-y-full"} transition-transform duration-1000 ease-out bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent drop-shadow-2xl`}>
+          <h1 className={`${windowWidth <= 768 ? 'text-4xl' : 'text-5xl md:text-6xl'} font-extrabold tracking-tighter transform ${isLoaded ? "translate-y-0" : "translate-y-full"} transition-transform duration-1000 ease-out bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent drop-shadow-2xl`}>
             Shaktidhar Gupta
           </h1>
         </div>
 
         <div className="h-8 overflow-hidden mb-6">
-          <div className="animate-cycleText">
-            <p className="h-8 flex items-center justify-center text-lg uppercase tracking-widest text-gray-300">Software Developer</p>
-            <p className="h-8 flex items-center justify-center text-lg uppercase tracking-widest text-gray-300">UX Designer</p>
-            <p className="h-8 flex items-center justify-center text-lg uppercase tracking-widest text-gray-300">Creative Coder</p>
+          <div className="cycling-text">
+            <p className={`h-8 flex items-center justify-center ${windowWidth <= 768 ? 'text-base' : 'text-lg'} uppercase tracking-widest text-gray-300`}>Software Developer</p>
+            <p className={`h-8 flex items-center justify-center ${windowWidth <= 768 ? 'text-base' : 'text-lg'} uppercase tracking-widest text-gray-300`}>UX Designer</p>
+            <p className={`h-8 flex items-center justify-center ${windowWidth <= 768 ? 'text-base' : 'text-lg'} uppercase tracking-widest text-gray-300`}>Creative Coder</p>
           </div>
         </div>
 
-        <p className={`text-lg mb-10 opacity-80 max-w-lg mx-auto transform ${isLoaded ? "translate-y-0 opacity-80" : "translate-y-5 opacity-0"} transition-all duration-1000 ease-out delay-300`} style={{ fontFamily: '"DM Serif Display", serif' }}>
+        <p className={`${windowWidth <= 768 ? 'text-base' : 'text-lg'} mb-10 opacity-80 max-w-lg mx-auto transform ${isLoaded ? "translate-y-0 opacity-80" : "translate-y-5 opacity-0"} transition-all duration-1000 ease-out delay-300`} style={{ fontFamily: '"DM Serif Display", serif' }}>
           Crafting digital experiences that blend aesthetics with functionality
         </p>
 
         <div className={`flex flex-wrap justify-center gap-5 transform ${isLoaded ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"} transition-all duration-1000 ease-out delay-500`}>
-
           <a
             href="https://www.linkedin.com/in/sktigpta/"
             target="_blank"
@@ -146,35 +162,34 @@ function Hero({ navigateToSection }) {
         </div>
       </div>
 
-      {/* Enhanced Floating shapes with blur effect */}
+      {/* Simplified Floating shapes - Reduced count and effects on mobile */}
       <div className="absolute w-full h-full z-10">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(windowWidth <= 768 ? 8 : 20)].map((_, i) => (
           <div
             key={i}
-            className={`absolute w-12 h-12 ${isLoaded ? "opacity-30" : "opacity-0"} transition-opacity duration-1000`}
+            className="absolute w-12 h-12 opacity-20 transition-opacity duration-1000"
             style={{
               top: `${15 + (i * 4) % 70}%`,
               left: `${10 + (i * 5) % 80}%`,
-              animation: `floatBadge 8s ease-in-out infinite`,
+              animation: `floatBadge ${windowWidth <= 768 ? 6 : 8}s ease-in-out infinite`,
               animationDelay: `${i * 0.6}s`,
-              filter: `blur(${1 + (i % 3) * 0.5}px)`
+              filter: `blur(${windowWidth <= 768 ? 0.5 : 1 + (i % 3) * 0.5}px)`
             }}
-
           >
             <div
               className="w-full h-full border border-blue-300/40 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full backdrop-blur-sm"
               style={{
-                animation: `floatShape ${18 + i % 12}s infinite linear`,
+                animation: `floatShape ${12 + i % 8}s infinite linear`,
                 animationDelay: `${i * 0.2}s`,
-                boxShadow: '0 0 20px rgba(147, 197, 253, 0.2)'
+                boxShadow: windowWidth <= 768 ? '0 0 10px rgba(147, 197, 253, 0.1)' : '0 0 20px rgba(147, 197, 253, 0.2)'
               }}
             ></div>
           </div>
         ))}
       </div>
 
-      {/* Enhanced Skill badges with improved blur effects */}
-      {windowWidth > 768 && (
+      {/* Skill badges - Only on desktop */}
+      {windowWidth > 1024 && (
         <div className="absolute w-full h-full z-15">
           {[
             {
@@ -220,7 +235,7 @@ function Hero({ navigateToSection }) {
           ].map((skill, i) => (
             <div
               key={i}
-              className={`absolute px-5 py-3 rounded-xl border border-white/20 bg-gradient-to-r ${skill.color} flex items-center gap-3 cursor-pointer transform ${isLoaded ? "scale-100 opacity-100" : "scale-75 opacity-0"} transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:border-white/40`}
+              className={`absolute px-5 py-3 rounded-xl border border-white/20 bg-gradient-to-r ${skill.color} flex items-center gap-3 cursor-pointer transform transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:border-white/40 ${isLoaded ? "scale-100 opacity-90" : "scale-75 opacity-0"}`}
               style={{
                 top: skill.top,
                 left: skill.left,
@@ -228,7 +243,7 @@ function Hero({ navigateToSection }) {
                 bottom: skill.bottom,
                 transitionDelay: skill.delay,
                 backdropFilter: "blur(12px)",
-                animation: `floatBadge ${12 + i * 2}s infinite ease-in-out`,
+                animation: `skillFloat ${8 + i * 2}s infinite ease-in-out`,
                 animationDelay: skill.delay,
                 boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
               }}
@@ -240,11 +255,47 @@ function Hero({ navigateToSection }) {
         </div>
       )}
 
-      {/* Enhanced Animated Particles */}
+      {/* Enhanced Animated Particles with better performance */}
       <div className="absolute w-full h-full pointer-events-none z-10">
+        <style>
+          {`
+            @keyframes bgFloat {
+              0%, 100% { transform: translate(0, 0) scale(1); }
+              25% { transform: translate(20px, -30px) scale(1.1); }
+              50% { transform: translate(-25px, 20px) scale(0.9); }
+              75% { transform: translate(15px, 35px) scale(1.05); }
+            }
+            @keyframes floatBadge {
+              0%, 100% { transform: translateY(0px) rotate(0deg); }
+              25% { transform: translateY(-15px) rotate(2deg); }
+              50% { transform: translateY(-25px) rotate(0deg); }
+              75% { transform: translateY(-10px) rotate(-2deg); }
+            }
+            @keyframes floatShape {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+            @keyframes skillFloat {
+              0%, 100% { 
+                transform: translateY(0px) translateX(0px) rotate(0deg); 
+                filter: brightness(1);
+              }
+              25% { 
+                transform: translateY(-8px) translateX(3px) rotate(1deg); 
+                filter: brightness(1.1);
+              }
+              50% { 
+                transform: translateY(-15px) translateX(-2px) rotate(0deg); 
+                filter: brightness(1.2);
+              }
+              75% { 
+                transform: translateY(-5px) translateX(4px) rotate(-1deg); 
+                filter: brightness(1.05);
+              }
+            }
+          `}
+        </style>
         {particles.map((particle) => {
-          const particleAnimationName = `particle-${particle.id}`;
-          const particleBlinkName = `particle-blink-${particle.id}`;
           const moveX = particle.movementAxis === 'horizontal' ? particle.movementRange * particle.movementDirection : 0;
           const moveY = particle.movementAxis === 'vertical' ? particle.movementRange * particle.movementDirection : 0;
 
@@ -259,38 +310,31 @@ function Hero({ navigateToSection }) {
                 height: `${particle.size}px`,
                 transitionDelay: `${particle.delay * 0.1}s`,
                 animation: `
-                  ${particleAnimationName} ${particle.duration}s infinite alternate ease-in-out, 
-                  ${particleBlinkName} ${particle.blinkDuration}s infinite ease-in-out
+                  particleFloat-${particle.id} ${particle.duration}s infinite alternate ease-in-out, 
+                  particleBlink-${particle.id} ${particle.blinkDuration}s infinite ease-in-out
                 `,
                 animationDelay: `${particle.delay}s, ${particle.blinkDelay}s`,
-                opacity: particle.opacity,
               }}
             >
               <style>
                 {`
-                @keyframes ${particleAnimationName} {
-                  0% { transform: translate(0, 0) rotate(0deg); }
-                  25% { transform: translate(${moveX * 0.3}px, ${moveY * 0.3}px) rotate(${particle.movementDirection * 45}deg); }
-                  50% { transform: translate(${moveX * 0.7}px, ${moveY * 0.7}px) rotate(${particle.movementDirection * 90}deg); }
-                  75% { transform: translate(${moveX * 0.5}px, ${moveY * 0.5}px) rotate(${particle.movementDirection * 45}deg); }
-                  100% { transform: translate(${moveX}px, ${moveY}px) rotate(${particle.movementDirection * 180}deg); }
+                @keyframes particleFloat-${particle.id} {
+                  0% { transform: translate(0, 0) rotate(0deg); opacity: ${particle.baseOpacity * 0.8}; }
+                  25% { transform: translate(${moveX * 0.3}px, ${moveY * 0.3}px) rotate(${particle.movementDirection * 45}deg); opacity: ${particle.baseOpacity}; }
+                  50% { transform: translate(${moveX * 0.7}px, ${moveY * 0.7}px) rotate(${particle.movementDirection * 90}deg); opacity: ${particle.baseOpacity * 1.2}; }
+                  75% { transform: translate(${moveX * 0.5}px, ${moveY * 0.5}px) rotate(${particle.movementDirection * 45}deg); opacity: ${particle.baseOpacity}; }
+                  100% { transform: translate(${moveX}px, ${moveY}px) rotate(${particle.movementDirection * 180}deg); opacity: ${particle.baseOpacity * 0.8}; }
                 }
-                @keyframes ${particleBlinkName} {
-                  0%, 100% { opacity: ${particle.opacity}; }
-                  50% { opacity: ${particle.opacity * 0.2}; }
-                }
-                @keyframes bgFloat {
-                  0%, 100% { transform: translate(0, 0) scale(1); }
-                  25% { transform: translate(20px, -30px) scale(1.1); }
-                  50% { transform: translate(-25px, 20px) scale(0.9); }
-                  75% { transform: translate(15px, 35px) scale(1.05); }
+                @keyframes particleBlink-${particle.id} {
+                  0%, 100% { opacity: 1; }
+                  50% { opacity: 0.3; }
                 }
                 `}
               </style>
               <div
                 className="w-full h-full rounded-full bg-gradient-to-r from-white via-blue-200 to-purple-200"
                 style={{
-                  boxShadow: `0 0 ${particle.size + 5}px rgba(255, 255, 255, ${particle.opacity * 0.8})`
+                  boxShadow: `0 0 ${particle.size + (windowWidth <= 768 ? 2 : 5)}px rgba(255, 255, 255, ${particle.baseOpacity * (windowWidth <= 768 ? 0.4 : 0.8)})`
                 }}
               ></div>
             </div>
@@ -298,12 +342,9 @@ function Hero({ navigateToSection }) {
         })}
       </div>
 
-      {/* Enhanced Social media icons */}
-      <div className="hidden lg:block z-20">
-        <div
-          className={`absolute bottom-17 right-10 flex gap-4 z-20 transform ${isLoaded ? "translate-x-0 opacity-100" : "translate-x-5 opacity-0"
-            } transition-all duration-1000 ease-out delay-700`}
-        >
+      {/* Social media icons - Hidden on mobile for performance */}
+      {windowWidth > 768 && (
+        <div className="absolute bottom-17 right-10 flex gap-4 z-20">
           <a
             href="https://github.com/sktigpta/"
             target="_blank"
@@ -329,9 +370,9 @@ function Hero({ navigateToSection }) {
             <FaTwitter />
           </a>
         </div>
-      </div>
+      )}
 
-      {/* Enhanced Scroll indicator */}
+      {/* Scroll indicator */}
       <div
         onClick={() => navigateToSection?.(1)}
         className={`absolute bottom-15 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-20 cursor-pointer ${isLoaded ? "translate-y-0 opacity-70" : "translate-y-8 opacity-0"} transition-all duration-1000 ease-out delay-1000 hover:opacity-100`}
@@ -341,6 +382,28 @@ function Hero({ navigateToSection }) {
           <div className="absolute inset-0 bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-all duration-500 ease-in-out"></div>
         </div>
       </div>
+
+      {/* Add the enhanced CSS animations */}
+      <style>
+        {`
+          /* Enhanced cycling text animation */
+          .cycling-text {
+            animation: cycleText 9s infinite;
+          }
+          
+          @keyframes cycleText {
+            0%, 30% { transform: translateY(0); }
+            33.33%, 63.33% { transform: translateY(-32px); }
+            66.66%, 96.66% { transform: translateY(-64px); }
+            100% { transform: translateY(0); }
+          }
+          
+          /* Smooth transitions */
+          .cycling-text {
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+        `}
+      </style>
     </div>
   )
 }
