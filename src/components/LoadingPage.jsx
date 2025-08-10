@@ -30,8 +30,12 @@ const LoadingPage = ({ onLoadingComplete }) => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mb-8"
         >
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
-            SG
+          <div className="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
+            <div
+              className="w-[60px] h-[60px] rounded-full bg-gradient-to-br overflow-hidden border-white/20 shadow-lg flex items-center justify-center text-white font-bold text-2xl"
+            >
+              <img src="/projects/profile/profile.png" alt="profile image" />
+            </div>
           </div>
           <h1 className="text-2xl font-bold text-white">Shaktidhar Gupta</h1>
         </motion.div>
@@ -69,7 +73,6 @@ const LoadingPage = ({ onLoadingComplete }) => {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="text-gray-400 mt-4 text-sm"
         >
-          Loading...
         </motion.p>
       </div>
     </motion.div>
