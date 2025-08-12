@@ -31,9 +31,9 @@ import {
 const Skills = () => {
   const skills = {
     Languages: [
-      { name: 'Python', logoId: 'fileCode', color: 'from-cyan-400/20 to-blue-500/20' },
-      { name: 'JavaScript', logoId: 'fileJson', color: 'from-yellow-400/20 to-orange-500/20' },
       { name: 'C++', logoId: 'code', color: 'from-blue-400/20 to-indigo-500/20' },
+      { name: 'JavaScript', logoId: 'fileJson', color: 'from-yellow-400/20 to-orange-500/20' },
+      { name: 'Python', logoId: 'fileCode', color: 'from-cyan-400/20 to-blue-500/20' },
       { name: 'HTML/CSS', logoId: 'monitorSmartphone', color: 'from-orange-400/20 to-red-500/20' },
       { name: 'SQL', logoId: 'database', color: 'from-green-400/20 to-emerald-500/20' }
     ],
@@ -243,7 +243,7 @@ const Skills = () => {
               animationDelay: `${index * 0.1}s`,
               boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
             }}
-            
+
             role="gridcell"
             tabIndex={0}
             aria-label={`${name} skill`}
