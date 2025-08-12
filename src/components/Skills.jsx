@@ -204,12 +204,12 @@ const Skills = () => {
           role="tablist"
           aria-label="Skill category filters"
         >
-          <div className="inline-flex gap-2">
+          <div className="inline-flex gap-2 h-10 justify-start items-center">
             {filters.map((filter) => (
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`px-5 py-2 rounded-xl text-sm transition-all whitespace-nowrap border backdrop-blur-sm hover:scale-105 ${
+                className={`px-4 h-7 rounded-xl text-sm transition-all whitespace-nowrap border backdrop-blur-sm hover:scale-105 justify-center items-center ${
                   activeFilter === filter
                     ? 'bg-white/20 border-white/40 text-white font-semibold shadow-lg'
                     : 'bg-white/10 border-white/20 text-neutral-200 hover:bg-white/15 hover:border-white/30'
@@ -243,6 +243,7 @@ const Skills = () => {
               animationDelay: `${index * 0.1}s`,
               boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
             }}
+            
             role="gridcell"
             tabIndex={0}
             aria-label={`${name} skill`}
