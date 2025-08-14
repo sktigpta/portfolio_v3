@@ -7,6 +7,7 @@ import About from './components/About';
 import Skills from './components/Skills';
 import Contact from './components/Contact';
 import Projects from './components/Projects';
+import CertificationsCarousel from './components/CertificationsCarousel';
 import BlogPage from './components/BlogPage';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -43,7 +44,7 @@ const App = () => {
 
   // Update active section based on scroll position
   const updateActiveSection = () => {
-    const sections = ['home', 'skills', 'projects', 'contact'];
+    const sections = ['home', 'skills', 'certifications', 'projects', 'contact'];
     const scrollPosition = window.scrollY + 100; // Offset for navbar
 
     for (const sectionId of sections) {
@@ -121,6 +122,9 @@ const App = () => {
                 </section>
                 <section id="skills">
                   <Skills />
+                </section>
+                <section id="certifications">
+                  <CertificationsCarousel />
                 </section>
                 <section id="projects">
                   <Projects />

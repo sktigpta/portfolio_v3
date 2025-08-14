@@ -8,3 +8,11 @@
     font-style: normal;
     font-size: 1.8rem;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
