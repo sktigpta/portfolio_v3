@@ -81,7 +81,7 @@ const Navbar = ({ activeSection, scrolled, navigateToSection, navItems, isScroll
   // Enhanced navigation handler with cross-route support
   const handleNavigation = (sectionId) => {
     const isOnHomePage = location.pathname === '/';
-    const homeSections = ['home', 'skills', 'projects', 'contact'];
+    const homeSections = ['home', 'Skills & Certifications', 'projects', 'contact'];
     
     if (sectionId === 'blog') {
       navigate('/blog');
