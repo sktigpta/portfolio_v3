@@ -16,13 +16,21 @@ const App = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [scrolled, setScrolled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isScrollingUp, setIsScrollingUp] = useState(false);
+  const lastScrollYRef = useRef(0);
   const isNavigatingRef = useRef(false);
 
   // Handle scroll effect for navbar
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-      
+      const currentY = window.scrollY;
+      setScrolled(currentY > 50);
+      const isUp = currentY < lastScrollYRef.current;
+      // tolerate minor jitter
+      if (Math.abs(currentY - lastScrollYRef.current) > 5) {
+        setIsScrollingUp(isUp && currentY > 80);
+        lastScrollYRef.current = currentY;
+      }
       // Only update active section if not currently navigating
       if (!isNavigatingRef.current) {
         updateActiveSection();
@@ -99,6 +107,7 @@ const App = () => {
           scrolled={scrolled} 
           navigateToSection={navigateToSection}
           navItems={navItems}
+          isScrollingUp={isScrollingUp}
         />
 
         <main style={{ marginTop: '55px' }}>

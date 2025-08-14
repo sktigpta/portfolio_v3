@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Navbar.css';
 
-const Navbar = ({ activeSection, scrolled, navigateToSection, navItems }) => {
+const Navbar = ({ activeSection, scrolled, navigateToSection, navItems, isScrollingUp = false }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -158,14 +158,17 @@ const Navbar = ({ activeSection, scrolled, navigateToSection, navItems }) => {
           onClick={handleLogoClick}
           style={{ cursor: 'pointer' }}
         >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM10 18C5.58 18 2 14.42 2 10C2 5.58 5.58 2 10 2C14.42 2 18 5.58 18 10C18 14.42 14.42 18 10 18Z" fill="currentColor"/>
-          </svg>
-          <span className="logo-text">Shaktidhar</span>
+          <div className="profile-area">
+            <img src="/projects/profile/profile.png" alt="Profile" className="profile-avatar" onError={(e)=>{e.currentTarget.style.display='none';}} />
+            <div className="profile-meta">
+              <span className="profile-name">Shaktidhar Gupta</span>
+              <span className="profile-desc">I Build What Matters!</span>
+            </div>
+          </div>
         </motion.div>
         
-        {/* Desktop menu */}
-        <div className="nav-items-container">
+        {/* Desktop menu (hidden on scroll up) */}
+        <div className="nav-items-container" style={{ display: isScrollingUp ? 'none' : 'flex' }}>
           <ul className="navbar-links">
             {navItems.map((item, i) => (
               <motion.li 
@@ -207,6 +210,26 @@ const Navbar = ({ activeSection, scrolled, navigateToSection, navItems }) => {
             </button>
           </motion.div>
         </div>
+
+        {/* Download button only, shown when scrolling up */}
+        {isScrollingUp && (
+          <div className="download-only">
+            <button 
+              onClick={() => {
+                const link = document.createElement('a');
+                link.href = '/cv.pdf';
+                link.download = 'Shaktidhar_Gupta_CV.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
+              className="contact-button"
+              aria-label="Download Resume"
+            >
+              Download Resume
+            </button>
+          </div>
+        )}
 
         {/* Mobile controls container */}
         <div className="mobile-controls">
