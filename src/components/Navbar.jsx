@@ -5,8 +5,20 @@ import './Navbar.css';
 
 const Navbar = ({ activeSection, scrolled, navigateToSection, navItems, isScrollingUp = false }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // Check if mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -167,52 +179,54 @@ const Navbar = ({ activeSection, scrolled, navigateToSection, navItems, isScroll
           </div>
         </motion.div>
         
-        {/* Desktop menu (hidden on scroll up) */}
-        <div className="nav-items-container" style={{ display: isScrollingUp ? 'none' : 'flex' }}>
-          <ul className="navbar-links">
-            {navItems.map((item, i) => (
-              <motion.li 
-                key={item.name}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.1 * (i + 1) }}
-              >
-                <button
-                  onClick={() => handleNavigation(item.name)}
-                  className={currentActiveSection === item.name ? 'active' : ''}
-                  aria-label={`Navigate to ${item.label}`}
+        {/* Desktop menu - only show/hide based on isScrollingUp for desktop */}
+        {!isMobile && (
+          <div className="nav-items-container" style={{ display: isScrollingUp ? 'none' : 'flex' }}>
+            <ul className="navbar-links">
+              {navItems.map((item, i) => (
+                <motion.li 
+                  key={item.name}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.1 * (i + 1) }}
                 >
-                  {item.label}
-                  {currentActiveSection === item.name && (
-                    <motion.div 
-                      className="active-indicator" 
-                      layoutId="desktopActiveIndicator"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                </button>
-              </motion.li>
-            ))}
-          </ul>
+                  <button
+                    onClick={() => handleNavigation(item.name)}
+                    className={currentActiveSection === item.name ? 'active' : ''}
+                    aria-label={`Navigate to ${item.label}`}
+                  >
+                    {item.label}
+                    {currentActiveSection === item.name && (
+                      <motion.div 
+                        className="active-indicator" 
+                        layoutId="desktopActiveIndicator"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                  </button>
+                </motion.li>
+              ))}
+            </ul>
 
-          <motion.div 
-            className="contact-button-container"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-          >
-            <button 
-              onClick={() => handleNavigation('contact')}
-              className={`contact-button ${currentActiveSection === 'contact' ? 'active' : ''}`}
-              aria-label="Navigate to Contact"
+            <motion.div 
+              className="contact-button-container"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
             >
-              Contact
-            </button>
-          </motion.div>
-        </div>
+              <button 
+                onClick={() => handleNavigation('contact')}
+                className={`contact-button ${currentActiveSection === 'contact' ? 'active' : ''}`}
+                aria-label="Navigate to Contact"
+              >
+                Contact
+              </button>
+            </motion.div>
+          </div>
+        )}
 
-        {/* Download button only, shown when scrolling up */}
-        {isScrollingUp && (
+        {/* Download button only, shown when scrolling up - desktop only */}
+        {!isMobile && isScrollingUp && (
           <div className="download-only">
             <button 
               onClick={() => {
@@ -231,45 +245,47 @@ const Navbar = ({ activeSection, scrolled, navigateToSection, navItems, isScroll
           </div>
         )}
 
-        {/* Mobile controls container */}
-        <div className="mobile-controls">
-          <motion.div 
-            className="contact-button-container"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-          >
-            <button 
-              onClick={() => handleNavigation('contact')}
-              className={`contact-button ${currentActiveSection === 'contact' ? 'active' : ''}`}
-              aria-label="Navigate to Contact"
+        {/* Mobile controls container - always visible on mobile */}
+        {isMobile && (
+          <div className="mobile-controls">
+            <motion.div 
+              className="contact-button-container"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
             >
-              Contact
+              <button 
+                onClick={() => handleNavigation('contact')}
+                className={`contact-button ${currentActiveSection === 'contact' ? 'active' : ''}`}
+                aria-label="Navigate to Contact"
+              >
+                Contact
+              </button>
+            </motion.div>
+            
+            <button 
+              className="hamburger-button" 
+              onClick={toggleMenu}
+              aria-label="Toggle menu"
+              aria-expanded={isMenuOpen}
+            >
+              <span className="hamburger-icon">
+                {isMenuOpen ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                  </svg>
+                )}
+              </span>
             </button>
-          </motion.div>
-          
-          <button 
-            className="hamburger-button" 
-            onClick={toggleMenu}
-            aria-label="Toggle menu"
-            aria-expanded={isMenuOpen}
-          >
-            <span className="hamburger-icon">
-              {isMenuOpen ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="3" y1="12" x2="21" y2="12"></line>
-                  <line x1="3" y1="6" x2="21" y2="6"></line>
-                  <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-              )}
-            </span>
-          </button>
-        </div>
+          </div>
+        )}
         
         {/* Mobile menu overlay */}
         <AnimatePresence>
